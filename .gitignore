@@ -1,0 +1,19 @@
+*.o
+231113/
+Class doesnt name a type.txt
+PM.zip
+ProblemiCharString
+ProblemiRisolti
+ProjectManager.cbp
+ProjectManager.depend
+ProjectManager.layout
+TODO
+Test/
+TestConstructor/
+UML.dia
+UML.uxf
+a.out
+makefile
+pm
+tags
+token.txt
