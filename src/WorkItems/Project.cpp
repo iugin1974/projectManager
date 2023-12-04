@@ -101,3 +101,7 @@ void Project::update() {
 Table* Project::getTable() {
 	return new TableTask();
 }
+
+std::string Project::getFormattedInfo() {
+        return  std::string((hasComment()) ? "[c]" : "[ ]");
+}

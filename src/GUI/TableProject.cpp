@@ -42,14 +42,14 @@ void TableProject::display(Displayable *d)
         std::string percent = std::to_string(p->getPercent()) + "%%";
         setText(mainWin, colWidth, row, 2, percent);
 
-        if (p->hasComment())
-        {
-            setText(mainWin, colWidth, row, 3, "*" + p->getText());
-        }
-        else
-        {
-            setText(mainWin, colWidth, row, 3, p->getText());
-        }
+        //if (p->hasComment())
+        //{
+        //    setText(mainWin, colWidth, row, 3, "*" + p->getText());
+        //}
+        //else
+        //{
+            setText(mainWin, colWidth, row, 3, p->getFormattedInfo() + " " + p->getText());
+        //}
 
         wattroff(mainWin, A_REVERSE);
         wattroff(mainWin, A_BOLD);

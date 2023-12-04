@@ -38,6 +38,7 @@ public:
 	void update();
 	void removeTask(unsigned int i);
 	Table* getTable() override;
+  std::string getFormattedInfo() override;
 	};	
 
 #endif

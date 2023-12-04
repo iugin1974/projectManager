@@ -77,3 +77,9 @@ void Task::notifyProject() {
 Table* Task::getTable() {
 	return new TableSubtask();
 }
+
+std::string Task::getFormattedInfo() {
+        return  std::string((priority == "h") ? "[h]" : "[ ]") +
+		        std::string((isDone() == true)? "[d]" : "[ ]") +
+				std::string((hasComment()) ? "[c]" : "[ ]");
+}

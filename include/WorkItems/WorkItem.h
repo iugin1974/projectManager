@@ -24,6 +24,7 @@ public:
     bool hasComment();
     void addText(std::string text);
     std::string getText();
+    virtual std::string getFormattedInfo() = 0;
 
     static const int START_DATE = 1;
     static const int END_DATE = 0;

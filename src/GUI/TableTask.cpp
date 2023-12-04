@@ -48,14 +48,14 @@ void TableTask::display(Displayable *d)
             setText(mainWin, colWidth, row, 1, "--/--/--");
 
         setText(mainWin, colWidth, row, 2, t->getPriority().c_str());
-        if (t->hasComment())
-        {
-            setText(mainWin, colWidth, row, 3, "*" + t->getText());
-        }
-        else
-        {
-            setText(mainWin, colWidth, row, 3, t->getText());
-        }
+        //if (t->hasComment())
+        //{
+            setText(mainWin, colWidth, row, 3, t->getFormattedInfo() + " " + t->getText());
+        //}
+        //else
+        //{
+        //    setText(mainWin, colWidth, row, 3, t->getText());
+        //}
 
         wattroff(mainWin, A_BOLD);
         wattroff(mainWin, COLOR_PAIR(1));

@@ -37,6 +37,7 @@ public:
   void setPriority(std::string priority);
   std::string getPriority();
 	Table* getTable() override;
+  std::string getFormattedInfo() override;
 };
 
 #endif
