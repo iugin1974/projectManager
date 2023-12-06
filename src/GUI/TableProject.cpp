@@ -44,13 +44,13 @@ void TableProject::display(Displayable *d)
         std::string percent = std::to_string(p->getPercent()) + "%%";
         setText(mainWin, colWidth, row, 2, percent);
 
-        //if (p->hasComment())
+        // if (p->hasComment())
         //{
-        //    setText(mainWin, colWidth, row, 3, "*" + p->getText());
-        //}
-        //else
+        //     setText(mainWin, colWidth, row, 3, "*" + p->getText());
+        // }
+        // else
         //{
-            setText(mainWin, colWidth, row, 3, p->getFormattedInfo() + " " + p->getText());
+        setText(mainWin, colWidth, row, 3, p->getFormattedInfo() + " " + p->getText());
         //}
 
         wattroff(mainWin, A_REVERSE);
@@ -140,11 +140,15 @@ void TableProject::navigate(Displayable *d)
                 break;
             view->createNewTask(project);
             break;
-        case 'D':
+        case 'D': {
             if (project == nullptr)
                 break;
+            bool isLast = currentProject == pl->size() - 1;
             view->deleteProject(pl, currentProject);
+            if (isLast)
+                currentProject--;
             break;
+        }
         case 'r':
             view->setRoot();
             break;

@@ -103,8 +103,11 @@ void TableSubtask::navigate(Displayable *d)
             }
             break;
         case 'D':
-            if (task->size() != 0)
+            if (task->size() != 0) {
+                bool isLast = currentSubtask == task->size() -1;
                  view->deleteSubtask(task, currentSubtask);
+                 if (isLast) currentSubtask--;
+            }
                     else
                  view->infoBox(5, 50, "There are no subtasks to cancel.", "Error");
                 break;

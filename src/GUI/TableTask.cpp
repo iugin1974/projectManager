@@ -13,7 +13,6 @@
 TableTask::TableTask() {}
 TableTask::~TableTask() {}
 
-
 void TableTask::display(Displayable *d)
 {
     wclear(mainWin);
@@ -50,11 +49,11 @@ void TableTask::display(Displayable *d)
             setText(mainWin, colWidth, row, 1, "--/--/--");
 
         setText(mainWin, colWidth, row, 2, t->getPriority().c_str());
-        //if (t->hasComment())
+        // if (t->hasComment())
         //{
-            setText(mainWin, colWidth, row, 3, t->getFormattedInfo() + " " + t->getText());
+        setText(mainWin, colWidth, row, 3, t->getFormattedInfo() + " " + t->getText());
         //}
-        //else
+        // else
         //{
         //    setText(mainWin, colWidth, row, 3, t->getText());
         //}
@@ -118,11 +117,15 @@ void TableTask::navigate(Displayable *d)
                 break;
             view->gannt(p);
             break;
-        case 'D':
+        case 'D': {
             if (task == nullptr)
                 break;
+            bool isLast = currentTask == p->size() - 1;
             view->deleteTask(p, currentTask);
+            if (isLast)
+                currentTask--;
             break;
+        }
         case 'd':
             if (task == nullptr)
                 break;
