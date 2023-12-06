@@ -14,8 +14,6 @@ private:
   std::vector<Subtask*> subtaskList;
   Project *project;
   void notifyProject();
-
-protected:
   bool done = false;
   std::string priority = "l";
 
@@ -23,7 +21,7 @@ protected:
 public:
   Task(WorkItem *parent);
   Task();
-  ~Task();
+  ~Task() override;
   WorkItem getParent();
   Project *getProject();
   Subtask *getNewSubtask();

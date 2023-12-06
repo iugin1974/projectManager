@@ -72,7 +72,7 @@ void TableProject::display(Displayable *d)
             std::string name = t->getText();
             if (t->dateIsValid())
                 name += " (" + t->getDateAsString(Project::END_DATE) + ")";
-            setText(mainWin, colWidth, row, 3, name);
+            setText(mainWin, colWidth, row, 3, "   "+name);
             wattroff(mainWin, COLOR_PAIR(1));
             wattroff(mainWin, COLOR_PAIR(2));
             wattroff(mainWin, A_BOLD);

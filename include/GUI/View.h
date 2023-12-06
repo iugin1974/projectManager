@@ -11,6 +11,7 @@ class TableTask;
 class TableSubtask;
 class Controller;
 class Displayable;
+class Subtask;
 
 class View : public Observer
 {
@@ -50,10 +51,12 @@ public:
 	void gannt(Project *p);
 	void setDate(WorkItem *t, int type);
 	void changeTaskPriority(Task *t);
+	void changeSubtaskPriority(Subtask *s);
 	void addComment(WorkItem *wi);
 	void showComment(std::string comment);
 	void editProject(Project *p);
 	void editTask(Task *t);
+	void editSubtask(Subtask *s);
 	void deleteTask(Project *p, unsigned int i);
 	void deleteSubtask(Task* t, unsigned int i);
 	void createNewTask(Project *p);

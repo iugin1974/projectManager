@@ -17,6 +17,7 @@ private:
 
 public:
     WorkItem(WorkItem* parent);
+    virtual ~WorkItem();
     WorkItem *getParent();
 
     void addComment(std::string comment);

@@ -47,6 +47,7 @@ public:
 	bool setRoot(std::string txt);
 	bool writeOnFile(std::string path, std::string txt);
 	void changeTaskPriority(Task *t);
+	void changeSubtaskPriority(Subtask* s);
 	void deleteProject(ProjectLibrary *pl, unsigned int i);
 	void deleteTask(Project *p, unsigned int i);
 	void deleteSubtask(Task* t, unsigned int i);

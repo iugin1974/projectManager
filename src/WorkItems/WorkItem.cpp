@@ -14,6 +14,10 @@ if (parent == nullptr) { // l'unico WorkItem che avrà parent null è Project
 }
 }
 
+WorkItem::~WorkItem() {
+
+}
+
 WorkItem* WorkItem::getParent() {
 	return parent;
 }

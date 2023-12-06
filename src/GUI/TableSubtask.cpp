@@ -83,7 +83,7 @@ void TableSubtask::navigate(Displayable *d)
         case 'p':
             if (task->size() > 0)
             {
-                view->changeTaskPriority(subtask);
+                view->changeSubtaskPriority(subtask);
             }
             break;
 
@@ -115,7 +115,7 @@ void TableSubtask::navigate(Displayable *d)
         }
         break;
         case 'e':
-            view->editTask(subtask);
+            view->editSubtask(subtask);
             break;
         case 'C':
             view->addComment(subtask);
@@ -124,10 +124,10 @@ void TableSubtask::navigate(Displayable *d)
             view->showComment(subtask->getComment());
             break;
         case KEY_UP:
-            highlight(subtask, -1);
+            highlight(task, -1);
             break;
         case KEY_DOWN:
-            highlight(subtask, 1);
+            highlight(task, 1);
             break;
         case KEY_RESIZE:
         {

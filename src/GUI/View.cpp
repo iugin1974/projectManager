@@ -486,6 +486,11 @@ void View::changeTaskPriority(Task *t)
     controller->changeTaskPriority(t);
 }
 
+void View::changeSubtaskPriority(Subtask *s)
+{
+    controller->changeSubtaskPriority(s);
+}
+
 void View::editTask(Task *t)
 {
     std::string input;
@@ -495,27 +500,17 @@ void View::editTask(Task *t)
         t->addText(input);
         input.clear();
     }
-    setInputMaske(&input, "End date (dd/mm/yyyy) [" + t->getDateAsString(Project::END_DATE) + "]: ");
+}
+
+void View::editSubtask(Subtask* s)
+{
+    std::string input;
+    setInputMaske(&input, "Subtask name [" + s->getText() + "]: ");
     if (!input.empty())
     {
-        if (Date::isValidDateFormat(&input))
-        {
-            t->setDate(Project::END_DATE, input);
-        }
-        else
-        {
-            infoBox(5, 50, "Invalid date format.", "Error");
-            t->setDate(Project::END_DATE, t->getDateAsString(Project::END_DATE));
-        }
+        s->addText(input);
+        input.clear();
     }
-    input.clear();
-    setInputMaske(&input, "Priority (l/h) [" + t->getPriority() + "]: ");
-    if (input.empty())
-        return;
-    if (input == "h")
-        t->setPriority("h");
-    else
-        t->setPriority("l");
 }
 
 // TODO

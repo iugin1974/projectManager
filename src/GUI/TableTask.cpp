@@ -64,7 +64,7 @@ void TableTask::display(Displayable *d)
         for (unsigned int j = 0; j < t->size(); j++)
         {
             Subtask *sub = t->getSubtask(j);
-            setText(mainWin, colWidth, row, 3, "\t" + sub->getText());
+            setText(mainWin, colWidth, row, 3, "   " + sub->getText());
             drawCol(mainWin, colWidth, 3, row++, ACS_VLINE);
         }
     }

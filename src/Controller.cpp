@@ -478,6 +478,13 @@ void Controller::changeTaskPriority(Task *t)
 		t->setPriority("l");
 }
 
+void Controller::changeSubtaskPriority(Subtask* s){
+if (s->getPriority() == "l")
+		s->setPriority("h");
+	else
+		s->setPriority("l");
+}
+
 void Controller::deleteProject(ProjectLibrary *pl, unsigned int i)
 {
 	pl->removeProject(i);

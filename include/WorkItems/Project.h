@@ -23,7 +23,7 @@ private:
 
 public:
 	Project(WorkItem* parent);
-	~Project();
+	~Project() override;
 	void setProjectLibrary(ProjectLibrary *pl);
 	void addTask(Task *t);
 	Task *getNewTask();
