@@ -9,6 +9,8 @@
 #include "Subtask.h"
 
 TableSubtask::TableSubtask(){}
+TableSubtask::~TableSubtask(){}
+
 void TableSubtask::display(Displayable *d)
 {
     wclear(mainWin);
@@ -124,10 +126,10 @@ void TableSubtask::navigate(Displayable *d)
             view->showComment(subtask->getComment());
             break;
         case KEY_UP:
-            highlight(subtask, -1);
+            highlight(task, -1);
             break;
         case KEY_DOWN:
-            highlight(subtask, 1);
+            highlight(task, 1);
             break;
         case KEY_RESIZE:
         {

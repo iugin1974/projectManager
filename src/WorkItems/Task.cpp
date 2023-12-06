@@ -36,8 +36,8 @@ subtaskList.push_back(s);
 void Task::removeSubtask(unsigned int i) 
 {
 Subtask* s = subtaskList.at(i);
-delete s;
 subtaskList.erase(subtaskList.begin()+i);
+delete s;
 }
 
 Project* Task::getProject() {

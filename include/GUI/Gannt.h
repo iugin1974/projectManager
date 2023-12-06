@@ -14,6 +14,7 @@ long int getPos(Project* p, tm* date, long int factor);
 
 public:
 Gannt();
+~Gannt();
     void display(Displayable *d) override;
     void navigate(Displayable *d) override;
     void highlight(Displayable *d, int i) override;

@@ -10,6 +10,7 @@ private:
   int currentTask = 0;
 public:
   TableTask();
+  ~TableTask();
   void display(Displayable *d) override;
   void navigate(Displayable *d) override;
   void highlight(Displayable *d, int i) override;

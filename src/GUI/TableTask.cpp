@@ -11,6 +11,8 @@
 #include "View.h"
 
 TableTask::TableTask() {}
+TableTask::~TableTask() {}
+
 
 void TableTask::display(Displayable *d)
 {

@@ -29,6 +29,7 @@ protected:
 	virtual void display(Displayable *d){};
 public:
 	Table();
+	virtual ~Table();
 	void setWindows(View *w, WINDOW *mainWin, WINDOW *menuBar, WINDOW *headerWin);
 	void initTable(int lines, int columns);
 	virtual void navigate(Displayable *d){};

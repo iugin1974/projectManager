@@ -14,6 +14,8 @@ view = v;
     headerWin = hw;
 }
 
+Table::~Table() {}
+
 void Table::initTable(int l, int c)
 {
     cols = c;

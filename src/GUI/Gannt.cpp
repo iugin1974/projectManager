@@ -12,6 +12,8 @@ Gannt::Gannt()
 {
 }
 
+Gannt::~Gannt() {}
+
 // TODO
 // Puoi mettere la data di creazione delle task, tipo gannt
 // cambia creation in start

@@ -8,6 +8,8 @@
 
 TableFiles::TableFiles() {}
 
+TableFiles::~TableFiles() {}
+
 void TableFiles::display(Displayable *d)
 {
     setTextMenuBar("n:new File   D:delete   [enter]:open file    q:quit");

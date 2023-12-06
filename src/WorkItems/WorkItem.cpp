@@ -3,46 +3,58 @@
 
 #include "WorkItem.h"
 
-WorkItem::WorkItem(WorkItem* parent)
+WorkItem::WorkItem(WorkItem *parent)
 {
-		this->parent = parent;
-if (parent == nullptr) { // l'unico WorkItem che avrà parent null è Project
+	this->parent = parent;
+	if (parent == nullptr)
+	{ // l'unico WorkItem che avrà parent null è Project
 		getNow(&startDate);
-} else { // tutti gli altri prendono date dal padre
-			setDate(WorkItem::START_DATE, parent->getDateAsString(WorkItem::START_DATE));
-	setDate(WorkItem::END_DATE, parent->getDateAsString(WorkItem::END_DATE));
-}
+	}
+	else
+	{ // tutti gli altri prendono date dal padre
+		setDate(WorkItem::START_DATE, parent->getDateAsString(WorkItem::START_DATE));
+		setDate(WorkItem::END_DATE, parent->getDateAsString(WorkItem::END_DATE));
+	}
 }
 
-WorkItem* WorkItem::getParent() {
+WorkItem::~WorkItem() {}
+
+WorkItem *WorkItem::getParent()
+{
 	return parent;
 }
 
-void WorkItem::addText(std::string t) {
+void WorkItem::addText(std::string t)
+{
 	text = t;
 }
 
-std::string WorkItem::getText() {
-    return text;
+std::string WorkItem::getText()
+{
+	return text;
 }
 
-bool WorkItem::hasComment() {
+bool WorkItem::hasComment()
+{
 	return !comment.empty();
 }
 
-void WorkItem::addComment(std::string c) {
+void WorkItem::addComment(std::string c)
+{
 	comment = c;
 }
 
-std::string WorkItem::getComment() {
+std::string WorkItem::getComment()
+{
 	return comment;
 }
 
-void WorkItem::getNow(tm* date) {
+void WorkItem::getNow(tm *date)
+{
 
-		std::time_t now = std::time(0); // get time now
-		tm* localTime = localtime(&now);
-		*date = *localTime;
+	std::time_t now = std::time(0); // get time now
+	tm *localTime = localtime(&now);
+	*date = *localTime;
 }
 
 void WorkItem::setDate(const int type, unsigned int d, unsigned int m, unsigned int y)
@@ -77,9 +89,12 @@ void WorkItem::setDate(const int type, std::string s)
 	setDate(type, d, m, y);
 }
 
-void WorkItem::setDate(const int type, tm date) {
-if (type == END_DATE) endDate = date;
-else if (type == START_DATE) startDate = date;
+void WorkItem::setDate(const int type, tm date)
+{
+	if (type == END_DATE)
+		endDate = date;
+	else if (type == START_DATE)
+		startDate = date;
 }
 
 std::string WorkItem::getDateAsString(const int type)
@@ -101,7 +116,6 @@ tm WorkItem::getDate(const int type)
 	else if (type == START_DATE)
 		return startDate;
 }
-
 
 int WorkItem::getRemainingDays(tm date)
 {

@@ -10,6 +10,7 @@ class TableProject : public Table {
 
   public:
     TableProject();
+    ~TableProject();
     void display(Displayable *d) override;
     void navigate(Displayable *d) override;
     void highlight(Displayable *d, int i) override;

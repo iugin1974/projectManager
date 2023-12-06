@@ -9,6 +9,8 @@
 
 TableProject::TableProject() {}
 
+TableProject::~TableProject() {}
+
 void TableProject::display(Displayable *d)
 {
     setTextMenuBar("[enter]:edit   n:new Project   t:new task   f:files   s:save   e:edit   C:comment   c:view comment   g:Gannt diagram   2:add end date   S:save on ftp   D:delete   r:set root   q:quit");

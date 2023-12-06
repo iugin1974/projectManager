@@ -10,6 +10,7 @@ private:
   int currentSubtask = 0;
 public:
   TableSubtask();
+  ~TableSubtask();
   void display(Displayable *d) override;
   void navigate(Displayable *d) override;
   void highlight(Displayable *d, int i) override;
