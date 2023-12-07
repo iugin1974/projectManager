@@ -63,7 +63,7 @@ wclear(mainWin);
         {
             wattron(mainWin, COLOR_PAIR(1));
         }
-        else if (t->getPriority() == "h")
+        else if (t->getPriority() == Task::HIGH)
         {
             wattron(mainWin, COLOR_PAIR(2));
         }

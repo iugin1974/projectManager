@@ -210,7 +210,7 @@ void Controller::load(ProjectLibrary *pl)
 			}
 
 			const char *pr = task->Attribute("priority");
-			t->setPriority(pr);
+			t->setPriority(atoi(pr));
 
 			const char *dn = task->Attribute("done");
 			if (strcmp(dn, "1") == 0)
@@ -245,7 +245,7 @@ void Controller::load(ProjectLibrary *pl)
 				}
 
 				const char *pr = subtask->Attribute("priority");
-				s->setPriority(pr);
+				s->setPriority(atoi(pr));
 
 				const char *dn = subtask->Attribute("done");
 				if (strcmp(dn, "1") == 0)
@@ -329,7 +329,7 @@ void Controller::saveTask(TiXmlElement *parent, Task *t)
 	task->SetAttribute("starts", t->getDateAsString(WorkItem::START_DATE).c_str());
 	task->SetAttribute("ends", t->getDateAsString(Project::END_DATE).c_str());
 	task->SetAttribute("done", t->isDone());
-	task->SetAttribute("priority", t->getPriority().c_str());
+	task->SetAttribute("priority", t->getPriority());
 	if (t->hasComment())
 	{
 		task->SetAttribute("comment", t->getComment().c_str());
@@ -348,7 +348,7 @@ void Controller::saveSubtask(TiXmlElement *parent, Subtask *s)
 	task->SetAttribute("starts", s->getDateAsString(WorkItem::START_DATE).c_str());
 	task->SetAttribute("ends", s->getDateAsString(Project::END_DATE).c_str());
 	task->SetAttribute("done", s->isDone());
-	task->SetAttribute("priority", s->getPriority().c_str());
+	task->SetAttribute("priority", s->getPriority());
 	if (s->hasComment())
 	{
 		task->SetAttribute("comment", s->getComment().c_str());
@@ -472,10 +472,10 @@ bool Controller::writeOnFile(std::string path, std::string txt)
 
 void Controller::changeTaskPriority(Task *t)
 {
-	if (t->getPriority() == "l")
-		t->setPriority("h");
+	if (t->getPriority() == Task::LOW)
+		t->setPriority(Task::HIGH);
 	else
-		t->setPriority("l");
+		t->setPriority(Task::LOW);
 }
 
 void Controller::deleteProject(ProjectLibrary *pl, unsigned int i)

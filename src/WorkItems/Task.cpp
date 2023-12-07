@@ -4,51 +4,62 @@
 #include "Subtask.h"
 #include "TableSubtask.h"
 
-Task::Task(WorkItem* parent) : WorkItem(parent) {
-	}
+Task::Task(WorkItem *parent) : WorkItem(parent)
+{
+}
 
-Task::~Task() {
-for (unsigned int i = 0; i<subtaskList.size(); i++) {
+Task::~Task()
+{
+	for (unsigned int i = 0; i < subtaskList.size(); i++)
+	{
 		delete subtaskList.at(i);
 	}
 }
 
-Subtask* Task::getNewSubtask() {
-	Subtask* s = new Subtask(this);
+Subtask *Task::getNewSubtask()
+{
+	Subtask *s = new Subtask(this);
 	return s;
 }
 
-  Subtask* Task::getSubtask(unsigned int i) {
-	  return subtaskList.at(i);
-  }
+Subtask *Task::getSubtask(unsigned int i)
+{
+	return subtaskList.at(i);
+}
 
-  std::vector<Subtask*> Task::getSubtaskList() {
-	  return subtaskList;
-  }
+std::vector<Subtask *> Task::getSubtaskList()
+{
+	return subtaskList;
+}
 
-int Task::size() {
+int Task::size()
+{
 	return subtaskList.size();
 }
-void Task::addSubtask(Subtask* s) {
-subtaskList.push_back(s);
-}
-
-void Task::removeSubtask(unsigned int i) 
+void Task::addSubtask(Subtask *s)
 {
-Subtask* s = subtaskList.at(i);
-subtaskList.erase(subtaskList.begin()+i);
-delete s;
+	subtaskList.push_back(s);
 }
 
-Project* Task::getProject() {
+void Task::removeSubtask(unsigned int i)
+{
+	Subtask *s = subtaskList.at(i);
+	subtaskList.erase(subtaskList.begin() + i);
+	delete s;
+}
+
+Project *Task::getProject()
+{
 	return project;
 }
 
-void Task::setDone(bool d) {
+void Task::setDone(bool d)
+{
 	done = d;
 }
 
-bool Task::isDone() {
+bool Task::isDone()
+{
 	return done;
 }
 
@@ -57,7 +68,8 @@ bool Task::isDone() {
  * l = bassa
  * h = alta
  */
-void Task::setPriority(std::string p) {
+void Task::setPriority(int p)
+{
 	priority = p;
 }
 
@@ -66,20 +78,24 @@ void Task::setPriority(std::string p) {
  * 0 = bassa
  * 1 = alta
  */
-std::string Task::getPriority() {
+int Task::getPriority()
+{
 	return priority;
 }
 
-void Task::notifyProject() {
+void Task::notifyProject()
+{
 	project->update();
 }
 
-Table* Task::getTable() {
+Table *Task::getTable()
+{
 	return new TableSubtask();
 }
 
-std::string Task::getFormattedInfo() {
-        return  std::string((priority == "h") ? "[h]" : "[ ]") +
-		        std::string((isDone() == true)? "[d]" : "[ ]") +
-				std::string((hasComment()) ? "[c]" : "[ ]");
+std::string Task::getFormattedInfo()
+{
+	return std::string((priority == Task::HIGH) ? "h" : "-") +
+		   std::string((isDone() == true) ? "d" : "-") +
+		   std::string((hasComment()) ? "c" : "-");
 }

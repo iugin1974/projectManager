@@ -20,7 +20,7 @@ void TableTask::display(Displayable *d)
     Project *p = static_cast<Project *>(d);
     unsigned int row = 0;
     int colWidth[] = {14, 14, 10};
-    std::string h1[4] = {"Starts", "Ends", "Priority", "Task name"};
+    std::string h1[4] = {"Starts", "Ends", "Flags", "Task name"};
     printHeader(h1, colWidth, 4, LEFT_ALIGN, 0);
 
     drawHLine(mainWin, row++);
@@ -34,7 +34,7 @@ void TableTask::display(Displayable *d)
         {
             wattron(mainWin, COLOR_PAIR(1));
         }
-        else if (t->getPriority() == "h")
+        else if (t->getPriority() == Task::HIGH)
         {
             wattron(mainWin, COLOR_PAIR(2));
         }
@@ -48,15 +48,8 @@ void TableTask::display(Displayable *d)
         else
             setText(mainWin, colWidth, row, 1, "--/--/--");
 
-        setText(mainWin, colWidth, row, 2, t->getPriority().c_str());
-        // if (t->hasComment())
-        //{
-        setText(mainWin, colWidth, row, 3, t->getFormattedInfo() + " " + t->getText());
-        //}
-        // else
-        //{
-        //    setText(mainWin, colWidth, row, 3, t->getText());
-        //}
+        setText(mainWin, colWidth, row, 2, t->getFormattedInfo());
+        setText(mainWin, colWidth, row, 3, t->getText());
 
         wattroff(mainWin, A_BOLD);
         wattroff(mainWin, COLOR_PAIR(1));
@@ -65,7 +58,7 @@ void TableTask::display(Displayable *d)
         for (unsigned int j = 0; j < t->size(); j++)
         {
             Subtask *sub = t->getSubtask(j);
-            setText(mainWin, colWidth, row, 3, "\t" + sub->getText());
+            setText(mainWin, colWidth, row, 3, "   " + sub->getText());
             drawCol(mainWin, colWidth, 3, row++, ACS_VLINE);
         }
     }

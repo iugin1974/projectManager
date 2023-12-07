@@ -11,16 +11,17 @@ class Task : public Displayable, public WorkItem
 {
 
 private:
-  std::vector<Subtask*> subtaskList;
+  std::vector<Subtask *> subtaskList;
   Project *project;
   void notifyProject();
 
 protected:
   bool done = false;
-  std::string priority = "l";
-
+  int priority = LOW;
 
 public:
+  static const int LOW = 0;
+  static const int HIGH = 1;
   Task(WorkItem *parent);
   Task();
   ~Task();
@@ -34,9 +35,9 @@ public:
   int size();
   bool isDone();
   void setDone(bool done);
-  void setPriority(std::string priority);
-  std::string getPriority();
-	Table* getTable() override;
+  void setPriority(int priority);
+  int getPriority();
+  Table *getTable() override;
   std::string getFormattedInfo() override;
 };
 

@@ -66,7 +66,7 @@ void TableProject::display(Displayable *d)
             {
                 wattron(mainWin, COLOR_PAIR(1));
             }
-            else if (t->getPriority() == "h")
+            else if (t->getPriority() == Task::HIGH)
             {
                 wattron(mainWin, A_BOLD);
                 wattron(mainWin, COLOR_PAIR(2));

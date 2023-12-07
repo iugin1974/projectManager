@@ -509,13 +509,13 @@ void View::editTask(Task *t)
         }
     }
     input.clear();
-    setInputMaske(&input, "Priority (l/h) [" + t->getPriority() + "]: ");
+    setInputMaske(&input, std::string("Priority (l/h) [") + (t->getPriority() == Task::LOW ? "l" : "h") + "]: ");
     if (input.empty())
         return;
     if (input == "h")
-        t->setPriority("h");
+        t->setPriority(Task::HIGH);
     else
-        t->setPriority("l");
+        t->setPriority(Task::LOW);
 }
 
 // TODO

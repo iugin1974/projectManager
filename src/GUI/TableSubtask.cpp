@@ -8,8 +8,8 @@
 #include "TableSubtask.h"
 #include "Subtask.h"
 
-TableSubtask::TableSubtask(){}
-TableSubtask::~TableSubtask(){}
+TableSubtask::TableSubtask() {}
+TableSubtask::~TableSubtask() {}
 
 void TableSubtask::display(Displayable *d)
 {
@@ -18,7 +18,7 @@ void TableSubtask::display(Displayable *d)
     Task *t = static_cast<Task *>(d);
     unsigned int row = 0;
     int colWidth[] = {14, 14, 10};
-    std::string h1[4] = {"Starts", "Ends", "Priority", "Task name"};
+    std::string h1[4] = {"Starts", "Ends", "Flags", "Task name"};
     printHeader(h1, colWidth, 4, LEFT_ALIGN, 0);
 
     drawHLine(mainWin, row++);
@@ -32,7 +32,7 @@ void TableSubtask::display(Displayable *d)
         {
             wattron(mainWin, COLOR_PAIR(1));
         }
-        else if (st->getPriority() == "h")
+        else if (st->getPriority() == Task::HIGH)
         {
             wattron(mainWin, COLOR_PAIR(2));
         }
@@ -46,15 +46,8 @@ void TableSubtask::display(Displayable *d)
         else
             setText(mainWin, colWidth, row, 1, "--/--/--");
 
-        setText(mainWin, colWidth, row, 2, st->getPriority().c_str());
-        if (st->hasComment())
-        {
-            setText(mainWin, colWidth, row, 3, "*" + st->getText());
-        }
-        else
-        {
-            setText(mainWin, colWidth, row, 3, st->getText());
-        }
+        setText(mainWin, colWidth, row, 2, st->getFormattedInfo());
+        setText(mainWin, colWidth, row, 3, st->getText());
 
         wattroff(mainWin, A_BOLD);
         wattroff(mainWin, COLOR_PAIR(1));
@@ -73,7 +66,8 @@ void TableSubtask::navigate(Displayable *d)
     while ((ch = wgetch(mainWin)) != 'q')
     {
         Subtask *subtask = nullptr;
-        if (task->size() > 0) task->getSubtask(currentSubtask);
+        if (task->size() > 0)
+            subtask = task->getSubtask(currentSubtask);
         switch (ch)
         {
         case 'n':
@@ -103,14 +97,16 @@ void TableSubtask::navigate(Displayable *d)
             }
             break;
         case 'D':
-            if (task->size() != 0) {
-                bool isLast = currentSubtask == task->size() -1;
-                 view->deleteSubtask(task, currentSubtask);
-                 if (isLast) currentSubtask--;
+            if (task->size() != 0)
+            {
+                bool isLast = currentSubtask == task->size() - 1;
+                view->deleteSubtask(task, currentSubtask);
+                if (isLast)
+                    currentSubtask--;
             }
-                    else
-                 view->infoBox(5, 50, "There are no subtasks to cancel.", "Error");
-                break;
+            else
+                view->infoBox(5, 50, "There are no subtasks to cancel.", "Error");
+            break;
         case 'd':
         {
             if (subtask->isDone())
