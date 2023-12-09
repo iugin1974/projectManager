@@ -6,8 +6,10 @@
 class WorkItem
 {
 
-private:
+protected:
     WorkItem *parent = nullptr;
+
+private:
     std::string text;
     std::string comment;
     tm endDate = {0};

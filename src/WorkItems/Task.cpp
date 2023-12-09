@@ -36,6 +36,7 @@ int Task::size()
 {
 	return subtaskList.size();
 }
+
 void Task::addSubtask(Subtask *s)
 {
 	subtaskList.push_back(s);
@@ -56,11 +57,27 @@ Project *Task::getProject()
 void Task::setDone(bool d)
 {
 	done = d;
+	Project* p = static_cast<Project*>(parent);
+	p->update();
 }
 
 bool Task::isDone()
 {
 	return done;
+}
+
+void Task::checkAndUpdateDoneStatus(const Subtask* callerSubtask) {
+    // Verifica se tutte le Subtask sono done, escludendo la chiamante (callerSubtask)
+    for (Subtask* s : subtaskList) {
+		if (s == callerSubtask) continue;
+        if (!s->isDone()) return;
+    }
+    // Aggiorna lo stato "done" della Task ma non posso chiamare
+	// setDone(true) altrimenti inizia un ciclo infinito
+    done = true;
+Project* p = static_cast<Project*>(parent);
+	p->update();
+
 }
 
 /*

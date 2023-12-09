@@ -70,8 +70,8 @@ bool Project::isDone() {
 void Project::calculatePercent() {
 	int taskNumber = taskList.size();
 	int taskDone = 0;
-	for (unsigned int i = 0; i<taskList.size(); i++) {
-		if (taskList.at(i)->isDone()) taskDone++;
+	for (Task* t : taskList) {
+		if (t->isDone()) taskDone++;
 	}
 	percent = taskDone * 100 / taskNumber; 
 }

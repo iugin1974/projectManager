@@ -13,15 +13,19 @@ TableProject::~TableProject() {}
 
 void TableProject::display(Displayable *d)
 {
-    setTextMenuBar("[enter]:edit   n:new Project   t:new task   f:files   s:save   e:edit   C:comment   c:view comment   g:Gannt diagram   2:add end date   S:save on ftp   D:delete   r:set root   q:quit");
-    wclear(mainWin);
     ProjectLibrary *pl = static_cast<ProjectLibrary *>(d);
-    int colWidth[] = {14, 14, 10};
-    std::string h1[4] = {"Date", "Rem. Days", "Done", "Project name"};
+    if (pl->size() == 0) {
+    setTextMenuBar("n:new Project");
+    } else {
+    setTextMenuBar("[enter]:edit   n:new Project   t:new task   f:files   s:save   e:edit   C:comment   c:view comment   g:Gannt diagram   2:add end date   S:save on ftp   D:delete   r:set root   q:quit");
+    }
+    wclear(mainWin);
+    int colWidth[] = {14, 14, 10, 10};
+    std::string h1[5] = {"Date", "Rem. Days", "Done", "Flags", "Project name"};
     printHeader(h1, colWidth, 4, LEFT_ALIGN, 0);
     unsigned int row = 0;
     drawHLine(mainWin, row);
-    drawCol(mainWin, colWidth, 3, row++, ACS_TTEE);
+    drawCol(mainWin, colWidth, 4, row++, ACS_TTEE);
     for (int i = 0; i < pl->size(); i++)
     {
         if (i == currentProject)
@@ -50,12 +54,13 @@ void TableProject::display(Displayable *d)
         // }
         // else
         //{
-        setText(mainWin, colWidth, row, 3, p->getFormattedInfo() + " " + p->getText());
+        setText(mainWin, colWidth, row, 3, p->getFormattedInfo());
+        setText(mainWin, colWidth, row, 4, p->getText());
         //}
 
         wattroff(mainWin, A_REVERSE);
         wattroff(mainWin, A_BOLD);
-        drawCol(mainWin, colWidth, 3, row++, ACS_VLINE);
+        drawCol(mainWin, colWidth, 4, row++, ACS_VLINE);
 
         // Task
         for (unsigned int j = 0; j < p->size(); j++)
@@ -74,14 +79,14 @@ void TableProject::display(Displayable *d)
             std::string name = t->getText();
             if (t->dateIsValid())
                 name += " (" + t->getDateAsString(Project::END_DATE) + ")";
-            setText(mainWin, colWidth, row, 3, name);
+            setText(mainWin, colWidth, row, 4, name);
             wattroff(mainWin, COLOR_PAIR(1));
             wattroff(mainWin, COLOR_PAIR(2));
             wattroff(mainWin, A_BOLD);
-            drawCol(mainWin, colWidth, 3, row++, ACS_VLINE);
+            drawCol(mainWin, colWidth, 4, row++, ACS_VLINE);
         }
         drawHLine(mainWin, row);
-        drawCol(mainWin, colWidth, 3, row++, ACS_PLUS);
+        drawCol(mainWin, colWidth, 4, row++, ACS_PLUS);
     }
     unsigned int currentLine = getCurrentLine(pl, currentProject);
     int l = lines - 5;

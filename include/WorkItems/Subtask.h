@@ -9,6 +9,7 @@ public:
 Subtask(WorkItem* parent);
 ~Subtask();
 std::string getFormattedInfo() override;
+void setDone(bool done) override;
 };
 
 #endif

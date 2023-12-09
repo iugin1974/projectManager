@@ -34,7 +34,8 @@ public:
   std::vector<Subtask *> getSubtaskList();
   int size();
   bool isDone();
-  void setDone(bool done);
+  virtual void setDone(bool done);
+  void checkAndUpdateDoneStatus(const Subtask* callerSubtask);
   void setPriority(int priority);
   int getPriority();
   Table *getTable() override;

@@ -122,6 +122,11 @@ void TableTask::navigate(Displayable *d)
         case 'd':
             if (task == nullptr)
                 break;
+                // la task può essere marcata come done
+                // solo se non ha subtask.
+                // Se ha subtask, devono prima essere segnate 
+                // tutte le subtask come done
+            if (task->size() > 0) break;
             if (task->isDone())
                 task->setDone(false);
             else
