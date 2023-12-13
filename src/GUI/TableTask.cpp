@@ -80,6 +80,9 @@ void TableTask::navigate(Displayable *d)
 
         switch (ch)
         {
+        case '?':
+            showHelp();
+            break;
         case 'n':
             view->createNewTask(p);
             break;
@@ -110,7 +113,8 @@ void TableTask::navigate(Displayable *d)
                 break;
             view->gannt(p);
             break;
-        case 'D': {
+        case 'D':
+        {
             if (task == nullptr)
                 break;
             bool isLast = currentTask == p->size() - 1;
@@ -122,11 +126,12 @@ void TableTask::navigate(Displayable *d)
         case 'd':
             if (task == nullptr)
                 break;
-                // la task può essere marcata come done
-                // solo se non ha subtask.
-                // Se ha subtask, devono prima essere segnate 
-                // tutte le subtask come done
-            if (task->size() > 0) break;
+            // la task può essere marcata come done
+            // solo se non ha subtask.
+            // Se ha subtask, devono prima essere segnate
+            // tutte le subtask come done
+            if (task->size() > 0)
+                break;
             if (task->isDone())
                 task->setDone(false);
             else
@@ -190,4 +195,28 @@ void TableTask::highlight(Displayable *d, int i)
         currentTask = p->size() - 1;
     if (currentTask == p->size())
         currentTask = 0;
+}
+
+void TableTask::showHelp()
+{
+    wclear(mainWin);
+    wclear(headerWin);
+    wprintw(mainWin, "Help\n\n");
+    wprintw(mainWin, "[Enter]: Enter Subtask window\n");
+    wprintw(mainWin, "n: new task\n");
+    wprintw(mainWin, "1: set start date\n");
+    wprintw(mainWin, "2: set end date\n");
+    wprintw(mainWin, "s: new subtask\n");
+    wprintw(mainWin, "e: edit current task\n");
+    wprintw(mainWin, "C: add comment\n");
+    wprintw(mainWin, "c: view comment\n");
+    wprintw(mainWin, "g: show Gannt diagramm\n");
+    wprintw(mainWin, "D: delete current task\n");
+    wprintw(mainWin, "p: change task priority\n");
+    wprintw(mainWin, "d: mark task as done/undone\n");
+    wprintw(mainWin, "?: show this help\n\n\n");
+    wprintw(mainWin, "Press any key to continue.");
+    wrefresh(mainWin);
+    wrefresh(headerWin);
+    wgetch(mainWin);
 }

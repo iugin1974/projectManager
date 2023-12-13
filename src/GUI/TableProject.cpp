@@ -6,6 +6,7 @@
 #include "Displayable.h"
 #include "View.h"
 #include "Task.h"
+#include "Subtask.h"
 
 TableProject::TableProject() {}
 
@@ -14,10 +15,13 @@ TableProject::~TableProject() {}
 void TableProject::display(Displayable *d)
 {
     ProjectLibrary *pl = static_cast<ProjectLibrary *>(d);
-    if (pl->size() == 0) {
-    setTextMenuBar("n:new Project");
-    } else {
-    setTextMenuBar("[enter]:edit   n:new Project   t:new task   f:files   s:save   e:edit   C:comment   c:view comment   g:Gannt diagram   2:add end date   S:save on ftp   D:delete   r:set root   q:quit");
+    if (pl->size() == 0)
+    {
+        setTextMenuBar("n:new Project");
+    }
+    else
+    {
+        setTextMenuBar("[enter]:edit   n:new Project   t:new task   f:files   s:save   e:edit   C:comment   c:view comment   g:Gannt diagram   2:add end date   S:save on ftp   D:delete   r:set root   q:quit");
     }
     wclear(mainWin);
     int colWidth[] = {14, 14, 10, 10};
@@ -84,6 +88,15 @@ void TableProject::display(Displayable *d)
             wattroff(mainWin, COLOR_PAIR(2));
             wattroff(mainWin, A_BOLD);
             drawCol(mainWin, colWidth, 4, row++, ACS_VLINE);
+            if (showSubtask)
+            {
+                for (unsigned int x = 0; x < t->size(); x++)
+                {
+                    Subtask *s = t->getSubtask(x);
+                    setText(mainWin, colWidth, row, 4, "\t" + s->getText());
+                    drawCol(mainWin, colWidth, 4, row++, ACS_VLINE);
+                }
+            }
         }
         drawHLine(mainWin, row);
         drawCol(mainWin, colWidth, 4, row++, ACS_PLUS);
@@ -107,6 +120,9 @@ void TableProject::navigate(Displayable *d)
 
         switch (ch)
         {
+        case '?':
+            showHelp();
+            break;
         case 's':
             if (pl->isChanged())
                 view->save(pl);
@@ -145,7 +161,8 @@ void TableProject::navigate(Displayable *d)
                 break;
             view->createNewTask(project);
             break;
-        case 'D': {
+        case 'D':
+        {
             if (project == nullptr)
                 break;
             bool isLast = currentProject == pl->size() - 1;
@@ -156,6 +173,9 @@ void TableProject::navigate(Displayable *d)
         }
         case 'r':
             view->setRoot();
+            break;
+        case 'k':
+            showSubtask = !showSubtask;
             break;
         case 'f':
         {
@@ -204,4 +224,29 @@ void TableProject::highlight(Displayable *d, int i)
         currentProject = pl->size() - 1;
     if (currentProject == pl->size())
         currentProject = 0;
+}
+
+void TableProject::showHelp()
+{
+    wclear(mainWin);
+    wclear(headerWin);
+    wprintw(mainWin, "Help\n\n");
+    wprintw(mainWin, "[Enter]: Enter Task window\n");
+    wprintw(mainWin, "n: new project\n");
+    wprintw(mainWin, "e: edit current project\n");
+    wprintw(mainWin, "2: set end date\n");
+    wprintw(mainWin, "C: add comment\n");
+    wprintw(mainWin, "c: view comment\n");
+    wprintw(mainWin, "g: show Gannt diagramm\n");
+    wprintw(mainWin, "k: show Subtasks");
+    wprintw(mainWin, "t: add new Task\n");
+    wprintw(mainWin, "D: delete current project\n");
+    wprintw(mainWin, "f: show File window\n");
+    wprintw(mainWin, "s: save\n");
+    wprintw(mainWin, "S: save on ftp-Server\n");
+    wprintw(mainWin, "?: show this help\n\n\n");
+    wprintw(mainWin, "Press any key to continue.");
+    wrefresh(mainWin);
+    wrefresh(headerWin);
+    wgetch(mainWin);
 }
