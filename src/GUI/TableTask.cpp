@@ -119,7 +119,7 @@ void TableTask::navigate(Displayable *d)
                 break;
             bool isLast = currentTask == p->size() - 1;
             view->deleteTask(p, currentTask);
-            if (isLast)
+            if (!isLast)
                 currentTask--;
             break;
         }
@@ -210,7 +210,7 @@ void TableTask::showHelp()
     wprintw(mainWin, "e: edit current task\n");
     wprintw(mainWin, "C: add comment\n");
     wprintw(mainWin, "c: view comment\n");
-    wprintw(mainWin, "g: show Gannt diagramm\n");
+    wprintw(mainWin, "g: show Gantt diagramm\n");
     wprintw(mainWin, "D: delete current task\n");
     wprintw(mainWin, "p: change task priority\n");
     wprintw(mainWin, "d: mark task as done/undone\n");

@@ -288,7 +288,7 @@ void Controller::save(ProjectLibrary *pl)
 	doc.LinkEndChild(decl);
 	TiXmlElement *root = new TiXmlElement("ProjectLibrary");
 	doc.LinkEndChild(root);
-	for (int j = 0; j < pl->size(); j++)
+	for (unsigned int j = 0; j < pl->size(); j++)
 	{
 		Project *p = pl->getProject(j);
 		TiXmlElement *project = new TiXmlElement("Project");
@@ -334,7 +334,7 @@ void Controller::saveTask(TiXmlElement *parent, Task *t)
 	{
 		task->SetAttribute("comment", t->getComment().c_str());
 	}
-	for (int i = 0; i < t->size(); i++)
+	for (unsigned int i = 0; i < t->size(); i++)
 	{
 		saveSubtask(task, t->getSubtask(i));
 	}
@@ -541,4 +541,5 @@ int Controller::checkDateValid(WorkItem *p, WorkItem *t, tm *newDate, int type)
 			return STARTS_AFTER_ENDING;
 		return DATE_VALID;
 	}
+	return -1; // solo affinché il compilatore non dia un warning
 }

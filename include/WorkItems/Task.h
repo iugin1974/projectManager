@@ -32,7 +32,7 @@ public:
   void addSubtask(Subtask *t);
   void removeSubtask(unsigned int i);
   std::vector<Subtask *> getSubtaskList();
-  int size();
+  unsigned int size();
   bool isDone();
   virtual void setDone(bool done);
   void checkAndUpdateDoneStatus(const Subtask* callerSubtask);

@@ -2,23 +2,23 @@
 
 #include "Displayable.h"
 #include "WorkItem.h"
-#include "Gannt.h"
+#include "Gantt.h"
 #include "Table.h"
 #include "View.h"
 #include "Date.h"
 #include "Task.h"
+#include "Subtask.h"
 
-Gannt::Gannt()
+Gantt::Gantt()
 {
 }
 
-Gannt::~Gannt() {}
+Gantt::~Gantt() {}
 
-// TODO
-// Puoi mettere la data di creazione delle task, tipo gannt
-// cambia creation in start
-
-long int Gannt::getFactor(Project *p, int cols)
+// Dato un progetto p e il numero di coloone dello schermo
+// la funzione calcola il fattore per cui la fine del
+// progetto coincide con la larghezza dello schermo
+long int Gantt::getFactor(Project *p, int cols)
 {
     tm startProject = p->getDate(Project::START_DATE);
     tm endProject = p->getDate(Project::END_DATE);
@@ -31,7 +31,9 @@ long int Gannt::getFactor(Project *p, int cols)
     return ep / cols;
 }
 
-long int Gannt::getPos(Project *p, tm *date, long int factor)
+// calcola la posizione sullo schermo di una data *date in base
+// al fattore calcolato dalla funzione precedente
+long int Gantt::getPos(Project *p, tm *date, long int factor)
 {
     tm startProject = p->getDate(WorkItem::START_DATE);
     long int sp = Date::toLong(&startProject);
@@ -40,25 +42,24 @@ long int Gannt::getPos(Project *p, tm *date, long int factor)
     return dl / factor;
 }
 
-void Gannt::display(Displayable *d)
+void Gantt::display(Displayable *d)
 {
-wclear(mainWin);
+    wclear(mainWin);
     setTextMenuBar("q:quit");
-    int wNameWidth = 0;
+
     Project *p = static_cast<Project *>(d);
-    long int factor = getFactor(p, cols - wNameWidth);
+    long int factor = getFactor(p, cols);
     // calcola la posizione della data auttuale
-    tm now;
     tm start = p->getDate(WorkItem::START_DATE);
+    tm now;
     Date::now(&now);
     int long nowL = Date::toLong(&now);
     int long startL = Date::toLong(&start);
     nowL = nowL - startL;
     int nowI = nowL / factor;
-
-    for (unsigned int i = 0; i < p->size(); i++)
+    int row = 1;
+    for (Task *t : p->getTaskList())
     {
-        Task *t = p->getTask(i);
         if (t->isDone())
         {
             wattron(mainWin, COLOR_PAIR(1));
@@ -67,31 +68,48 @@ wclear(mainWin);
         {
             wattron(mainWin, COLOR_PAIR(2));
         }
+        std::string text = t->getText() + " ";
+        mvwprintw(mainWin, row++, 0, text.c_str());
         // disegna prima la barra e poi scrive il nome della task
         // per poterlo scrivere sulla barra
         tm st = t->getDate(WorkItem::START_DATE);
         tm et = t->getDate(WorkItem::END_DATE);
         int startPos = getPos(p, &st, factor);
         int endPos = getPos(p, &et, factor);
-        for (int j = startPos; j <= endPos; j++)
+
+        for (; startPos <= endPos; startPos++)
         {
-            mvwaddch(mainWin, i+1, j, ACS_CKBOARD);
+            mvwaddch(mainWin, row, startPos, ACS_CKBOARD);
         }
 
-        std::string text = t->getText()+" ";
-        mvwprintw(mainWin, i+1, 0, text.c_str());
-
+        if (showSubtask)
+        {
+            for (Subtask *s : t->getSubtaskList())
+            {
+                row++;
+                mvwprintw(mainWin, row++, 0, s->getText().c_str());
+                tm ss = s->getDate(WorkItem::START_DATE);
+                tm es = s->getDate(WorkItem::END_DATE);
+                int startPosS = getPos(p, &ss, factor);
+                int endPosS = getPos(p, &es, factor);
+                for (; startPosS <= endPosS; startPosS++)
+                {
+                    mvwaddch(mainWin, row, startPosS, ACS_DIAMOND);
+                }
+            }
+            row++;
+        }
         wattroff(mainWin, COLOR_PAIR(1));
         wattroff(mainWin, COLOR_PAIR(2));
+        row++;
     }
     // segna la linea della data attuale sopra e sotto
-        mvwaddch(mainWin, 0, nowI, chtype ACS_VLINE);
-        for (int i = p->size()+1; i < lines; i++)
+    for (int i = 0; i < 200; i++)
         mvwaddch(mainWin, i, nowI, chtype ACS_VLINE);
-    prefresh(mainWin, 0, 0, 3, 0, lines - 1, cols);
+    prefresh(mainWin, firstShowedRow, 0, 3, 0, lines - 1, cols);
 }
 
-void Gannt::navigate(Displayable *d)
+void Gantt::navigate(Displayable *d)
 {
     Project *p = static_cast<Project *>(d);
     display(p);
@@ -102,7 +120,17 @@ void Gannt::navigate(Displayable *d)
         {
         case 'q':
             break;
-
+        case 'k':
+            showSubtask = !showSubtask;
+            firstShowedRow = 0;
+            break;
+        case KEY_DOWN:
+            firstShowedRow++;
+            break;
+        case KEY_UP:
+            if (firstShowedRow > 0)
+                firstShowedRow--;
+            break;
         default:
             break;
         }
@@ -110,4 +138,4 @@ void Gannt::navigate(Displayable *d)
     }
 }
 
-void Gannt::highlight(Displayable *d, int i) {}
+void Gantt::highlight(Displayable *d, int i) {}

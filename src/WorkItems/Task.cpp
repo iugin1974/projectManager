@@ -32,7 +32,7 @@ std::vector<Subtask *> Task::getSubtaskList()
 	return subtaskList;
 }
 
-int Task::size()
+unsigned int Task::size()
 {
 	return subtaskList.size();
 }

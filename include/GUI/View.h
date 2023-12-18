@@ -7,6 +7,7 @@
 #include "Files.h"
 #include "WorkItem.h"
 
+class TableProject;
 class TableTask;
 class TableSubtask;
 class Controller;

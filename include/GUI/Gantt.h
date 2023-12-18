@@ -1,20 +1,22 @@
-#ifndef GANNT_H
-#define GANNT_H
+#ifndef GANTT_H
+#define GANTT_H
 
 #include <ncurses.h>
 
 #include "Displayable.h"
 #include "Table.h"
 
-class Gannt : public Table
+class Gantt : public Table
 {
 private:
+bool showSubtask = false;
+int firstShowedRow = 0;
 int long getFactor(Project* p, int cols);
 long int getPos(Project* p, tm* date, long int factor);
 
 public:
-Gannt();
-~Gannt();
+Gantt();
+~Gantt();
     void display(Displayable *d) override;
     void navigate(Displayable *d) override;
     void highlight(Displayable *d, int i) override;

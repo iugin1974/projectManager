@@ -4,9 +4,10 @@
 #include "TableProject.h"
 #include "TableTask.h"
 #include "TableSubtask.h"
+#include "TableProject.h"
 #include "TableFiles.h"
 #include "Files.h"
-#include "Gannt.h"
+#include "Gantt.h"
 #include "Date.h"
 #include "ProjectLibrary.h"
 #include "WorkItem.h"
@@ -198,7 +199,7 @@ void View::navigateTable(Displayable *d)
 
 void View::gannt(Project *p)
 {
-    Gannt g;
+    Gantt g;
     g.setWindows(this, mainWin, menuBar, headerWin);
     g.initTable(lines, cols);
     g.navigate(p);

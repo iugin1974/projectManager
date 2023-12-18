@@ -15,14 +15,29 @@ TableProject::~TableProject() {}
 void TableProject::display(Displayable *d)
 {
     ProjectLibrary *pl = static_cast<ProjectLibrary *>(d);
-    if (pl->size() == 0)
+    /*if (pl->size() == 0)
     {
         setTextMenuBar("n:new Project");
     }
     else
     {
         setTextMenuBar("[enter]:edit   n:new Project   t:new task   f:files   s:save   e:edit   C:comment   c:view comment   g:Gannt diagram   2:add end date   S:save on ftp   D:delete   r:set root   q:quit");
+    }*/
+
+    int nt = 0; // number of Tasks
+    int ns = 0; // number of Subtasks
+    if (pl->size() > 0)
+    {
+        ns = pl->getProject(currentProject)->size();
+        Project *p = pl->getProject(currentProject);
+        for (unsigned int j = 0; j < p->size(); j++)
+        {
+            Task *t = p->getTask(j);
+            ns += t->size();
+        }
     }
+    std::string text = "Total " + std::to_string(pl->size()) + " projects. The current project has " + std::to_string(nt) + " task and " + std::to_string(ns) + " subtask";
+    setTextMenuBar(text);
     wclear(mainWin);
     int colWidth[] = {14, 14, 10, 10};
     std::string h1[5] = {"Date", "Rem. Days", "Done", "Flags", "Project name"};
@@ -167,7 +182,7 @@ void TableProject::navigate(Displayable *d)
                 break;
             bool isLast = currentProject == pl->size() - 1;
             view->deleteProject(pl, currentProject);
-            if (isLast)
+            if (!isLast)
                 currentProject--;
             break;
         }
@@ -237,7 +252,7 @@ void TableProject::showHelp()
     wprintw(mainWin, "2: set end date\n");
     wprintw(mainWin, "C: add comment\n");
     wprintw(mainWin, "c: view comment\n");
-    wprintw(mainWin, "g: show Gannt diagramm\n");
+    wprintw(mainWin, "g: show Gantt diagramm\n");
     wprintw(mainWin, "k: show Subtasks");
     wprintw(mainWin, "t: add new Task\n");
     wprintw(mainWin, "D: delete current project\n");

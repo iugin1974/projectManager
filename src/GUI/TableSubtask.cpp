@@ -101,7 +101,7 @@ void TableSubtask::navigate(Displayable *d)
             {
                 bool isLast = currentSubtask == task->size() - 1;
                 view->deleteSubtask(task, currentSubtask);
-                if (isLast)
+                if (!isLast)
                     currentSubtask--;
             }
             else

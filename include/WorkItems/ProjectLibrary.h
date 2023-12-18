@@ -27,7 +27,7 @@ class ProjectLibrary : public Observable, public Displayable {
 		void stateChanged() override;
 		bool isChanged();
 		void setChanged(bool changed);
-		int size();
+		unsigned int size();
 		void toString();
 		void removeProject(unsigned int i);
 		Table* getTable() override;

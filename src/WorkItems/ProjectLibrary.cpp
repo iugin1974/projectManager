@@ -57,7 +57,7 @@ bool ProjectLibrary::isChanged() {
     return changed;
 }
 
-int ProjectLibrary::size() {
+unsigned int ProjectLibrary::size() {
     return listProject.size();
 }
 
@@ -70,11 +70,9 @@ void ProjectLibrary::removeProject(unsigned int i) {
 }
 
 void ProjectLibrary::toString() {
-    for (int i = 0; i < size(); i++) {
-        Project* p = getProject(i);
+    for (Project* p : listProject) {
         std::cout << "Project:" << p->getText() << "\n";
-        for (unsigned int j = 0; j < p->size(); j++) {
-            Task* t = p->getTask(j);
+        for (Task* t : p ->getTaskList()) {
             std::cout << "\t" << t->getText() << "\n";
         }
     }

@@ -7,7 +7,7 @@
 class TableTask : public Table
 {
 private:
-  int currentTask = 0;
+  unsigned int currentTask = 0;
   void showHelp();
 public:
   TableTask();
