@@ -276,10 +276,8 @@ void Controller::load(ProjectLibrary *pl)
 				{
 					s->addComment(subtask->Attribute("comment"));
 				}
-				t->addSubtask(s);
 				subtask = subtask->NextSiblingElement("Subtask");
 			}
-			p->addTask(t);
 			task = task->NextSiblingElement("Task");
 		}
 
@@ -517,7 +515,6 @@ bool Controller::createTask(Project *p, std::string *text)
 {
 	Task *t = p->getNewTask(p);
 	t->addText(*text);
-	p->addTask(t);
 	return true;
 }
 
@@ -525,7 +522,6 @@ bool Controller::createSubtask(Task *t, std::string *text)
 {
 	Subtask *s = t->getNewSubtask();
 	s->addText(*text);
-	t->addSubtask(s);
 	return true;
 }
 

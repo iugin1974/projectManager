@@ -8,8 +8,8 @@ Task::Task(Project *parent) : WorkItem(parent)
 {
 }
 
-Task::Task(Task* parent) : WorkItem(parent) {
-
+Task::Task(Task *parent) : WorkItem(parent)
+{
 }
 
 Task::~Task()
@@ -23,6 +23,7 @@ Task::~Task()
 Subtask *Task::getNewSubtask()
 {
 	Subtask *s = new Subtask(this);
+	subtaskList.push_back(s);
 	return s;
 }
 
@@ -41,12 +42,6 @@ unsigned int Task::size()
 	return subtaskList.size();
 }
 
-void Task::addSubtask(Subtask *s)
-{
-	subtaskList.push_back(s);
-	checkAndUpdateDoneStatus();
-}
-
 void Task::removeSubtask(unsigned int i)
 {
 	Subtask *s = subtaskList.at(i);
@@ -62,8 +57,8 @@ Project *Task::getProject()
 void Task::setDone(bool d)
 {
 	done = d;
-	Project* p = static_cast<Project*>(parent);
-p->checkAndUpdateDoneStatus();
+	Project *p = static_cast<Project *>(parent);
+	p->checkAndUpdateDoneStatus();
 }
 
 bool Task::isDone()
@@ -71,19 +66,24 @@ bool Task::isDone()
 	return done;
 }
 
-void Task::checkAndUpdateDoneStatus() {
+void Task::checkAndUpdateDoneStatus()
+{
 	done = false;
-    // Verifica se tutte le Subtask sono done, escludendo la chiamante (callerSubtask)
-    for (Subtask* s : subtaskList) {
-        if (!s->isDone()) {
+	// Verifica se tutte le Subtask sono done, escludendo la chiamante (callerSubtask)
+	for (Subtask *s : subtaskList)
+	{
+		if (!s->isDone())
+		{
+			Project *p = static_cast<Project *>(parent);
+			p->checkAndUpdateDoneStatus();
 			return;
 		}
-		}
-    // Aggiorna lo stato "done" della Task ma non posso chiamare
+	}
+	// Aggiorna lo stato "done" della Task ma non posso chiamare
 	// setDone(true) altrimenti inizia un ciclo infinito
-    done = true;
-	Project* p = static_cast<Project*>(parent);
-p->checkAndUpdateDoneStatus();
+	done = true;
+	Project *p = static_cast<Project *>(parent);
+	p->checkAndUpdateDoneStatus();
 }
 
 /*

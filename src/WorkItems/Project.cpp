@@ -46,16 +46,11 @@ bool Project::hasFiles()
 /*
  * Crea una Task vuota e ritorna un puntatore
  * alla Task stessa */
-void Project::addTask(Task *t)
-{
-	taskList.push_back(t);
-	done = false; // una nuova task non può essere done
-	update();
-}
-
 Task *Project::getNewTask(Project* p)
 {
 	Task *t = new Task(p);
+	taskList.push_back(t);
+	done = false; // se c'è una nuova task, questa sarà undone. Quindi il progetto sarà undone
 	return t;
 }
 

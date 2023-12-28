@@ -30,7 +30,6 @@ public:
   Project *getProject();
   Subtask *getNewSubtask();
   Subtask *getSubtask(unsigned int i);
-  void addSubtask(Subtask *t);
   void removeSubtask(unsigned int i);
   std::vector<Subtask *> getSubtaskList();
   unsigned int size();

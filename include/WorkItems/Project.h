@@ -24,7 +24,6 @@ public:
 	Project();
 	~Project();
 	void setProjectLibrary(ProjectLibrary *pl);
-	void addTask(Task *t);
 	Task *getNewTask(Project* p);
 	Task *getTask(unsigned int t);
 	std::vector<Task *> getTaskList();

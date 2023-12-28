@@ -14,8 +14,8 @@ std::string Subtask::getFormattedInfo() {
 
 void Subtask::setDone(bool d) {
     done = d;
-		Task* t = static_cast<Task*>(parent);
-        t->checkAndUpdateDoneStatus();  
+	Task* t = static_cast<Task*>(parent);
+    t->checkAndUpdateDoneStatus();  
 }
 
 bool Subtask::isDone() {
