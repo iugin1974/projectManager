@@ -19,6 +19,7 @@ private:
 
 public:
     WorkItem(WorkItem* parent);
+    WorkItem();
     virtual ~WorkItem();
     WorkItem *getParent();
 
@@ -41,6 +42,8 @@ public:
     bool isPastDate(tm date);
     int getRemainingDays(tm date);
     static bool sortVector(WorkItem *t1, WorkItem *t2);
+    virtual bool isDone() = 0;
+    virtual void setDone(bool done) = 0;
 };
 
 #endif

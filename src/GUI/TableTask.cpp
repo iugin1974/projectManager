@@ -15,9 +15,15 @@ TableTask::~TableTask() {}
 
 void TableTask::display(Displayable *d)
 {
-    wclear(mainWin);
-    setTextMenuBar("[Enter]:edit   n:new Task   b:brainstorming   d:done/undone   C:comment   c:view comment   e:edit   D:delete   p:change priority   1:add start date   2:add end date   g:Gannt diagram   q:quit");
     Project *p = static_cast<Project *>(d);
+    wclear(mainWin);
+    int ns = 0; // number of Subtasks
+    if (p->size() > 0)
+    {
+        ns = p->getTask(currentTask)->size();
+    }
+    std::string text = "Total " + std::to_string(p->size()) + " tasks. The current task has " + std::to_string(ns) + " subtask";
+    setTextMenuBar(text);
     unsigned int row = 0;
     int colWidth[] = {14, 14, 10};
     std::string h1[4] = {"Starts", "Ends", "Flags", "Task name"};
@@ -119,7 +125,11 @@ void TableTask::navigate(Displayable *d)
                 break;
             bool isLast = currentTask == p->size() - 1;
             view->deleteTask(p, currentTask);
-            if (!isLast)
+            // se l'utente ha cancellato l'ultima riga della tabella
+            // la task corrente passa alla penultima,
+            // ma solo se ci sono ancora task,
+            // altrimenti currentTask darebbe un valore sbagliato
+            if (isLast && p->size() > 0)
                 currentTask--;
             break;
         }

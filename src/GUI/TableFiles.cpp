@@ -5,18 +5,17 @@
 #include "Displayable.h"
 #include "View.h"
 
-
 TableFiles::TableFiles() {}
 
 TableFiles::~TableFiles() {}
 
 void TableFiles::display(Displayable *d)
 {
-    setTextMenuBar("n:new File   D:delete   [enter]:open file    q:quit");
     Files *f = static_cast<Files *>(d);
-wclear(mainWin);
+    setTextMenuBar("Total files: " + std::to_string(f->size()));
+    wclear(mainWin);
     unsigned int row = 0;
- //   drawHLine(row++);
+    //   drawHLine(row++);
     for (int i = 0; i < f->size(); i++)
     {
         if (i == currentFile)
@@ -28,7 +27,7 @@ wclear(mainWin);
         wattroff(mainWin, A_REVERSE);
         wattroff(mainWin, A_BOLD);
     }
-//    drawHLine(row++);
+    //    drawHLine(row++);
     prefresh(mainWin, 0, 0, 3, 0, lines - 1, cols);
 }
 

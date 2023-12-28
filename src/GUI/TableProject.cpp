@@ -28,7 +28,7 @@ void TableProject::display(Displayable *d)
     int ns = 0; // number of Subtasks
     if (pl->size() > 0)
     {
-        ns = pl->getProject(currentProject)->size();
+        nt = pl->getProject(currentProject)->size();
         Project *p = pl->getProject(currentProject);
         for (unsigned int j = 0; j < p->size(); j++)
         {
@@ -40,7 +40,7 @@ void TableProject::display(Displayable *d)
     setTextMenuBar(text);
     wclear(mainWin);
     int colWidth[] = {14, 14, 10, 10};
-    std::string h1[5] = {"Date", "Rem. Days", "Done", "Flags", "Project name"};
+    std::string h1[5] = {"Ends", "Rem. Days", "Done", "Flags", "Project name"};
     printHeader(h1, colWidth, 4, LEFT_ALIGN, 0);
     unsigned int row = 0;
     drawHLine(mainWin, row);
@@ -67,15 +67,8 @@ void TableProject::display(Displayable *d)
         std::string percent = std::to_string(p->getPercent()) + "%%";
         setText(mainWin, colWidth, row, 2, percent);
 
-        // if (p->hasComment())
-        //{
-        //     setText(mainWin, colWidth, row, 3, "*" + p->getText());
-        // }
-        // else
-        //{
         setText(mainWin, colWidth, row, 3, p->getFormattedInfo());
         setText(mainWin, colWidth, row, 4, p->getText());
-        //}
 
         wattroff(mainWin, A_REVERSE);
         wattroff(mainWin, A_BOLD);
@@ -166,6 +159,13 @@ void TableProject::navigate(Displayable *d)
                 break;
             view->showComment(project->getComment());
             break;
+        case 'd':
+        if (project == nullptr)
+        break;
+            if (project->size() > 0)
+                break;
+            project->setDone(!project->isDone());
+            break;
         case 'g':
             if (project == nullptr)
                 break;
@@ -180,9 +180,15 @@ void TableProject::navigate(Displayable *d)
         {
             if (project == nullptr)
                 break;
+                // controlla se fosse l'ultimo progetto
+                // visualizzato nella tabella
             bool isLast = currentProject == pl->size() - 1;
             view->deleteProject(pl, currentProject);
-            if (!isLast)
+            // se l'utente ha cancellato l'ultima riga della tabella
+            // il progetto corrente passa alla penultima,
+            // ma solo se ci sono ancora progetti,
+            // altrimenti currentProject darebbe un valore sbagliato
+            if (isLast && pl->size() > 0)
                 currentProject--;
             break;
         }
@@ -251,6 +257,7 @@ void TableProject::showHelp()
     wprintw(mainWin, "e: edit current project\n");
     wprintw(mainWin, "2: set end date\n");
     wprintw(mainWin, "C: add comment\n");
+    wprintw(mainWin, "d: set done/undone\n");
     wprintw(mainWin, "c: view comment\n");
     wprintw(mainWin, "g: show Gantt diagramm\n");
     wprintw(mainWin, "k: show Subtasks");

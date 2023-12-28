@@ -21,7 +21,7 @@ void ProjectLibrary::addProject(Project* p) {
 }
 
 Project* ProjectLibrary::getNewProject() {
-    Project *p = new Project(nullptr);
+    Project *p = new Project();
     p->setProjectLibrary(this);
     return p;
 }

@@ -4,8 +4,12 @@
 #include "Subtask.h"
 #include "TableSubtask.h"
 
-Task::Task(WorkItem *parent) : WorkItem(parent)
+Task::Task(Project *parent) : WorkItem(parent)
 {
+}
+
+Task::Task(Task* parent) : WorkItem(parent) {
+
 }
 
 Task::~Task()
@@ -40,6 +44,7 @@ unsigned int Task::size()
 void Task::addSubtask(Subtask *s)
 {
 	subtaskList.push_back(s);
+	checkAndUpdateDoneStatus();
 }
 
 void Task::removeSubtask(unsigned int i)
@@ -58,7 +63,7 @@ void Task::setDone(bool d)
 {
 	done = d;
 	Project* p = static_cast<Project*>(parent);
-	p->update();
+p->checkAndUpdateDoneStatus();
 }
 
 bool Task::isDone()
@@ -66,18 +71,19 @@ bool Task::isDone()
 	return done;
 }
 
-void Task::checkAndUpdateDoneStatus(const Subtask* callerSubtask) {
+void Task::checkAndUpdateDoneStatus() {
+	done = false;
     // Verifica se tutte le Subtask sono done, escludendo la chiamante (callerSubtask)
     for (Subtask* s : subtaskList) {
-		if (s == callerSubtask) continue;
-        if (!s->isDone()) return;
-    }
+        if (!s->isDone()) {
+			return;
+		}
+		}
     // Aggiorna lo stato "done" della Task ma non posso chiamare
 	// setDone(true) altrimenti inizia un ciclo infinito
     done = true;
-Project* p = static_cast<Project*>(parent);
-	p->update();
-
+	Project* p = static_cast<Project*>(parent);
+p->checkAndUpdateDoneStatus();
 }
 
 /*

@@ -22,7 +22,8 @@ protected:
 public:
   static const int LOW = 0;
   static const int HIGH = 1;
-  Task(WorkItem *parent);
+  Task(Project* parent);
+  Task(Task* parent);
   Task();
   ~Task();
   WorkItem getParent();
@@ -33,9 +34,9 @@ public:
   void removeSubtask(unsigned int i);
   std::vector<Subtask *> getSubtaskList();
   unsigned int size();
-  bool isDone();
-  virtual void setDone(bool done);
-  void checkAndUpdateDoneStatus(const Subtask* callerSubtask);
+  bool isDone() override;
+  void setDone(bool done) override;
+  void checkAndUpdateDoneStatus();
   void setPriority(int priority);
   int getPriority();
   Table *getTable() override;

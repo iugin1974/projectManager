@@ -193,7 +193,7 @@ void Controller::load(ProjectLibrary *pl)
 		TiXmlElement *task = project->FirstChildElement("Task");
 		while (task)
 		{
-			Task *t = p->getNewTask();
+			Task *t = p->getNewTask(p);
 			const char *tsk = task->Attribute("text");
 			t->addText(tsk);
 
@@ -209,22 +209,31 @@ void Controller::load(ProjectLibrary *pl)
 				t->setDate(WorkItem::START_DATE, date);
 			}
 
-			const char *pr = task->Attribute("priority");
-			t->setPriority(atoi(pr));
-
-			const char *dn = task->Attribute("done");
-			if (strcmp(dn, "1") == 0)
+			if (attributeExists("priority", task))
 			{
-				t->setDone(true);
+				const char *pr = task->Attribute("priority");
+				t->setPriority(atoi(pr));
 			}
 			else
+				t->setPriority(0);
+
+			if (attributeExists("done", task))
 			{
-				t->setDone(false);
+				const char *dn = task->Attribute("done");
+				if (strcmp(dn, "1") == 0)
+				{
+					t->setDone(true);
+				}
+				else
+				{
+					t->setDone(false);
+				}
+				if (attributeExists("comment", task))
+				{
+					t->addComment(task->Attribute("comment"));
+				}
 			}
-			if (attributeExists("comment", task))
-			{
-				t->addComment(task->Attribute("comment"));
-			}
+
 			TiXmlElement *subtask = task->FirstChildElement("Subtask");
 			while (subtask)
 			{
@@ -244,17 +253,24 @@ void Controller::load(ProjectLibrary *pl)
 					s->setDate(WorkItem::START_DATE, date);
 				}
 
-				const char *pr = subtask->Attribute("priority");
-				s->setPriority(atoi(pr));
-
-				const char *dn = subtask->Attribute("done");
-				if (strcmp(dn, "1") == 0)
+				if (attributeExists("priority", subtask))
 				{
-					s->setDone(true);
+					const char *pr = subtask->Attribute("priority");
+					s->setPriority(atoi(pr));
 				}
 				else
+					s->setPriority(0);
+				if (attributeExists("done", subtask))
 				{
-					s->setDone(false);
+					const char *dn = subtask->Attribute("done");
+					if (strcmp(dn, "1") == 0)
+					{
+						s->setDone(true);
+					}
+					else
+					{
+						s->setDone(false);
+					}
 				}
 				if (attributeExists("comment", subtask))
 				{
@@ -328,8 +344,10 @@ void Controller::saveTask(TiXmlElement *parent, Task *t)
 	task->SetAttribute("text", t->getText().c_str());
 	task->SetAttribute("starts", t->getDateAsString(WorkItem::START_DATE).c_str());
 	task->SetAttribute("ends", t->getDateAsString(Project::END_DATE).c_str());
-	task->SetAttribute("done", t->isDone());
-	task->SetAttribute("priority", t->getPriority());
+	if (t->isDone())
+		task->SetAttribute("done", t->isDone());
+	if (t->getPriority() != 0)
+		task->SetAttribute("priority", t->getPriority());
 	if (t->hasComment())
 	{
 		task->SetAttribute("comment", t->getComment().c_str());
@@ -347,8 +365,10 @@ void Controller::saveSubtask(TiXmlElement *parent, Subtask *s)
 	task->SetAttribute("text", s->getText().c_str());
 	task->SetAttribute("starts", s->getDateAsString(WorkItem::START_DATE).c_str());
 	task->SetAttribute("ends", s->getDateAsString(Project::END_DATE).c_str());
-	task->SetAttribute("done", s->isDone());
-	task->SetAttribute("priority", s->getPriority());
+	if (s->isDone())
+		task->SetAttribute("done", s->isDone());
+	if (s->getPriority() != 0)
+		task->SetAttribute("priority", s->getPriority());
 	if (s->hasComment())
 	{
 		task->SetAttribute("comment", s->getComment().c_str());
@@ -488,16 +508,14 @@ void Controller::deleteTask(Project *p, unsigned int i)
 	p->removeTask(i);
 }
 
-void Controller::deleteSubtask(Task* t, unsigned int i)
+void Controller::deleteSubtask(Task *t, unsigned int i)
 {
-t->removeSubtask(i);
+	t->removeSubtask(i);
 }
 
 bool Controller::createTask(Project *p, std::string *text)
 {
-	if (text->empty())
-		return false;
-	Task *t = p->getNewTask();
+	Task *t = p->getNewTask(p);
 	t->addText(*text);
 	p->addTask(t);
 	return true;
@@ -505,8 +523,6 @@ bool Controller::createTask(Project *p, std::string *text)
 
 bool Controller::createSubtask(Task *t, std::string *text)
 {
-	if (text->empty())
-		return false;
 	Subtask *s = t->getNewSubtask();
 	s->addText(*text);
 	t->addSubtask(s);

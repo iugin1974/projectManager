@@ -361,7 +361,7 @@ void View::deleteSubtask(Task* t, unsigned int i)
 
 void View::updateView(ProjectLibrary *pl)
 {
-    clear();
+   // clear();
     // TODO   display(pl);
 }
 
@@ -385,12 +385,14 @@ void View::createNewTask(Project *p)
 {
     std::string input;
     setInputMaske(&input, "Task name: ");
+    if (input.empty()) return;
     controller->createTask(p, &input);
 }
 
 void View::createNewSubtask(Task *t) {
     std::string input;
     setInputMaske(&input, "Subtask name: ");
+    if (input.empty()) return;
     controller->createSubtask(t, &input);
 }
 

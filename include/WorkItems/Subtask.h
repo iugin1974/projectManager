@@ -6,9 +6,10 @@
 class Subtask : public Task {
 
 public:
-Subtask(WorkItem* parent);
+Subtask(Task* parent);
 ~Subtask();
 std::string getFormattedInfo() override;
+bool isDone() override;
 void setDone(bool done) override;
 };
 

@@ -13,9 +13,10 @@ TableSubtask::~TableSubtask() {}
 
 void TableSubtask::display(Displayable *d)
 {
-    wclear(mainWin);
-    setTextMenuBar("n:new Task   s:new subtask   b:brainstorming   d:done/undone   C:comment   c:view comment   e:edit   D:delete   p:change priority   1:add start date   2:add end date   q:quit");
     Task *t = static_cast<Task *>(d);
+    wclear(mainWin);
+    std::string text = "Total " + std::to_string(t->size()) + " subtasks";
+    setTextMenuBar(text);
     unsigned int row = 0;
     int colWidth[] = {14, 14, 10};
     std::string h1[4] = {"Starts", "Ends", "Flags", "Task name"};
@@ -101,7 +102,12 @@ void TableSubtask::navigate(Displayable *d)
             {
                 bool isLast = currentSubtask == task->size() - 1;
                 view->deleteSubtask(task, currentSubtask);
-                if (!isLast)
+                // se l'utente ha cancellato l'ultima riga della tabella
+            // la task corrente passa alla penultima,
+            // ma solo se ci sono ancora task,
+            // altrimenti currentTask darebbe un valore sbagliato
+
+                if (isLast && task->size() > 0)
                     currentSubtask--;
             }
             else

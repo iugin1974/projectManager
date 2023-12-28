@@ -1,7 +1,7 @@
 #include "Task.h"
 #include "Subtask.h"
 
-Subtask::Subtask(WorkItem* parent) : Task(parent) {
+Subtask::Subtask(Task* parent) : Task(parent) {
 }
 
 Subtask::~Subtask(){};
@@ -14,10 +14,10 @@ std::string Subtask::getFormattedInfo() {
 
 void Subtask::setDone(bool d) {
     done = d;
-
-    // Se done è true, notifica la Task genitore
-    if (done) {
 		Task* t = static_cast<Task*>(parent);
-        t->checkAndUpdateDoneStatus(this);  
-    }
+        t->checkAndUpdateDoneStatus();  
+}
+
+bool Subtask::isDone() {
+    return done;
 }

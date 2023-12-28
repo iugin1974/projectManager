@@ -3,21 +3,18 @@
 
 #include "WorkItem.h"
 
-WorkItem::WorkItem(WorkItem *parent)
+WorkItem::WorkItem() {}
+
+WorkItem::WorkItem(WorkItem *prnt)
 {
-	this->parent = parent;
-	if (parent == nullptr)
-	{ // l'unico WorkItem che avrà parent null è Project
-		getNow(&startDate);
-	}
-	else
-	{ // tutti gli altri prendono date dal padre
+	parent = prnt;
 		setDate(WorkItem::START_DATE, parent->getDateAsString(WorkItem::START_DATE));
 		setDate(WorkItem::END_DATE, parent->getDateAsString(WorkItem::END_DATE));
-	}
 }
 
-WorkItem::~WorkItem() {}
+WorkItem::~WorkItem() {
+	getNow(&startDate);
+}
 
 WorkItem *WorkItem::getParent()
 {
