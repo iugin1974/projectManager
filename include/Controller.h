@@ -22,7 +22,9 @@ private:
 	bool attributeExists(const char *name, TiXmlElement *element);
 	bool readConfigFile(const std::string key, std::string *value);
 	void saveTask(TiXmlElement* parent, Task* t);
+	void loadTask(TiXmlElement* parent, Project* p);
 	void saveSubtask(TiXmlElement* parent, Subtask* s);
+	void loadSubtask(TiXmlElement* parent, Task* t);
 
 public:
 	enum errorCode
