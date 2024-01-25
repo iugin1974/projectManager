@@ -45,6 +45,7 @@ void Controller::start()
 	{
 		std::string user_ftp;
 		std::string host_ftp;
+		std::string pwd;
 		bool found = false;
 		found = readConfigFile("user_ftp", &user_ftp);
 		if (!found)
@@ -58,10 +59,14 @@ void Controller::start()
 			std::cerr << "The .pmrc file was not found or the key 'host_ftp' does not exist.\nEdit the .pmrc file by adding the string 'host_ftp=<hostname>'" << std::endl;
 			exit(1);
 		}
+
+		found = readConfigFile("pass_ftp", &pwd);
 		// controlla se il file di configurazione esiste
 		// Se si, prende da lì le informazioni
 		// Altrimenti chiede all'utente
-		std::string pwd = getpass("FTP-Password", true);
+		if (!found) {
+		pwd = getpass("FTP-Password", true);
+		}
 		_ftp.setPassword(pwd);
 		_ftp.setHost(host_ftp);
 		_ftp.setUserName(user_ftp);
@@ -394,6 +399,10 @@ void Controller::saveOnFtp(ProjectLibrary *pl)
 {
 	save(pl);
 	_ftp.uploadFile("/home/eugenio/pm.xml");
+}
+
+bool Controller::ftpPasswordSet() {
+	return _ftp.isPasswordSet();
 }
 
 int Controller::get_char()

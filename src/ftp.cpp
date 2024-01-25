@@ -205,6 +205,11 @@ size_t ftp::my_fwrite(void *buffer, size_t size, size_t nmemb, void *stream)
 
 void ftp::setPassword(std::string pwd) {
 	this->password = strdup(pwd.c_str());
+	passwordSetted = false;
+}
+
+bool ftp::isPasswordSet() {
+return passwordSetted;
 }
 
 void ftp::setUserName(std::string userName) {

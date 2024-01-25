@@ -39,6 +39,7 @@ public:
 	};
 	void save(ProjectLibrary *pl);
 	void saveOnFtp(ProjectLibrary *pl);
+	bool ftpPasswordSet();
 	void start();
 	int main();
 	void set_useFtp(bool f);

@@ -39,7 +39,7 @@ void TableSubtask::display(Displayable *d)
         }
         if (i == currentSubtask)
         {
-            wattron(mainWin, A_BOLD);
+            wattron(mainWin, A_REVERSE);
         }
         setText(mainWin, colWidth, row, 0, st->getDateAsString(WorkItem::START_DATE));
         if (st->dateIsValid())
@@ -50,7 +50,7 @@ void TableSubtask::display(Displayable *d)
         setText(mainWin, colWidth, row, 2, st->getFormattedInfo());
         setText(mainWin, colWidth, row, 3, st->getText());
 
-        wattroff(mainWin, A_BOLD);
+        wattroff(mainWin, A_REVERSE);
         wattroff(mainWin, COLOR_PAIR(1));
         drawCol(mainWin, colWidth, 3, row++, ACS_VLINE);
     }

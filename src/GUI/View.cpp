@@ -570,5 +570,8 @@ void View::save(ProjectLibrary *pl)
 
 void View::saveOnFtp(ProjectLibrary *pl)
 {
+    if (controller->ftpPasswordSet()) {
+
+    } 
     controller->saveOnFtp(pl);
 }
