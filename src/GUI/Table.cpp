@@ -4,6 +4,7 @@
 #include "Table.h"
 #include "Project.h"
 #include "ProjectLibrary.h"
+#include "Task.h"
 
 Table::Table() {}
 
@@ -101,6 +102,24 @@ int Table::getCurrentLine(ProjectLibrary *pl, unsigned int currentProject)
         // aggiunge 1 perché anche il nome del progetto viene scritto
         // e 1 per la linea di delimitazione della tabella
         currentLine += 2;
+    }
+    return currentLine;
+}
+
+/**
+ * Ritorna il numero di linea della task evidenziata.
+ */
+int Table::getCurrentLine(Project *p, unsigned int currentTask)
+{
+    unsigned int currentLine = 1;
+    for (unsigned int i = 0; i < currentTask; i++)
+    {
+        Task *t = p->getTask(i);
+        // aggiunge il numero delle task, perché quando sono
+        // scritte, ognuna occupa una riga
+        currentLine += t->size();
+        // aggiunge 1 perché anche il nome del progetto viene scritto
+        currentLine += 1;
     }
     return currentLine;
 }

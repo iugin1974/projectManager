@@ -26,6 +26,7 @@ protected:
 	void printHeader(std::string text[], int colW[], int arrayLength, int alignement, int line);
 	void setText(WINDOW *win, int colW[], int line, int col, std::string text);
 	int getCurrentLine(ProjectLibrary *pl, unsigned int currentProject);
+	int getCurrentLine(Project *p, unsigned int currentTask);
 	virtual void display(Displayable *d){};
 public:
 	Table();

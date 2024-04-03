@@ -64,13 +64,20 @@ void TableTask::display(Displayable *d)
         for (unsigned int j = 0; j < t->size(); j++)
         {
             Subtask *sub = t->getSubtask(j);
+			if (sub->isDone()) {
+				wattron(mainWin, COLOR_PAIR(1));
+			}
             setText(mainWin, colWidth, row, 3, "   " + sub->getText());
+			wattroff(mainWin, COLOR_PAIR(1));
             drawCol(mainWin, colWidth, 3, row++, ACS_VLINE);
         }
     }
     drawHLine(mainWin, row);
     drawCol(mainWin, colWidth, 3, row, ACS_BTEE);
-    prefresh(mainWin, 0, 0, 3, 0, lines - 2, cols);
+	unsigned int currentLine = getCurrentLine(p, currentTask);
+	int l = lines - 5;
+	unsigned int gap = (int)(currentLine / l) * l;    
+	prefresh(mainWin, gap, 0, 3, 0, lines - 2, cols);
 }
 
 void TableTask::navigate(Displayable *d)
