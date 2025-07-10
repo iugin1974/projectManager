@@ -13,5 +13,9 @@ public:
     static std::string configFile();
     static std::string pmFile();
     static std::string pmTmpFile();
+	static void setPmFile(const std::string& f);
+
+private:
+static std::string file;
 };
 #endif

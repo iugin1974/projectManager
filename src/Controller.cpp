@@ -15,25 +15,47 @@
 #include <stdio.h>
 #include <locale.h>
 #include <string>
+#include <cstring>
 #include <cstdlib>
 #include <sys/stat.h>
 #include <filesystem>
 #include <map>
 
-int main(int argc, char *argv[])
-{
-	bool use_ftp = false;
-	if (argc == 2 && strcmp(argv[1], "--ftp") == 0)
-	{
-		use_ftp = true;
-	}
-	setlocale(LC_ALL, "de_DE");
-	Controller c;
-	c.set_useFtp(use_ftp);
-	c.start();
-	return 0;
+void print_help() {
+    std::cout << "Usage:\n"
+              << "  --ftp               Connect via FTP and use remote file operations\n"
+              << "  --file <fileName>   Work locally with the specified file\n"
+              << "  --help              Show this help message\n";
 }
 
+
+int main(int argc, char* argv[]) {
+    bool use_ftp = false;
+
+
+    if (argc == 2 && std::strcmp(argv[1], "--ftp") == 0) {
+        use_ftp = true;
+    } else if (argc == 3 && std::strcmp(argv[1], "--file") == 0) {
+        FileUtilities::setPmFile(argv[2]);
+    } else if (argc == 2 && std::strcmp(argv[1], "--help") == 0) {
+        print_help();
+        return 0;
+    } else if (argc == 1) {
+        // Nessuna opzione: usa il file di default
+    } else {
+        std::cerr << "Invalid arguments.\n";
+        print_help();
+        return 1;
+    }
+
+    std::setlocale(LC_ALL, "de_DE");
+
+    Controller c;
+    c.set_useFtp(use_ftp);
+    c.start();
+
+    return 0;
+}
 void Controller::set_useFtp(bool f)
 {
 	use_ftp = f;
@@ -163,7 +185,7 @@ void Controller::load(ProjectLibrary *pl)
 	if (use_ftp)
 		doc.LoadFile("/tmp/pm.xml");
 	else
-		doc.LoadFile("/home/eugenio/pm.xml");
+		doc.LoadFile(FileUtilities::pmFile().c_str());
 	bool loaded = doc.LoadFile();
 	if (!loaded)
 		return;
@@ -398,7 +420,7 @@ bool Controller::attributeExists(const char *name, TiXmlElement *element)
 void Controller::saveOnFtp(ProjectLibrary *pl)
 {
 	save(pl);
-	_ftp.uploadFile("/home/eugenio/pm.xml");
+	_ftp.uploadFile(FileUtilities::pmFile().c_str());
 }
 
 bool Controller::ftpPasswordSet() {

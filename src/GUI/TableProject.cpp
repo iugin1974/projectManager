@@ -260,7 +260,7 @@ void TableProject::showHelp()
     wprintw(mainWin, "d: set done/undone\n");
     wprintw(mainWin, "c: view comment\n");
     wprintw(mainWin, "g: show Gantt diagramm\n");
-    wprintw(mainWin, "k: show Subtasks");
+    wprintw(mainWin, "k: show Subtasks\n");
     wprintw(mainWin, "t: add new Task\n");
     wprintw(mainWin, "D: delete current project\n");
     wprintw(mainWin, "f: show File window\n");
