@@ -541,6 +541,9 @@ void View::createNewProject(ProjectLibrary *pl)
         return;
     }
     p->setDate(Project::END_DATE, input);
+tm date;
+Date::now(&date);
+	p->setDate(Project::START_DATE, date);
     pl->addProject(p);
 }
 
