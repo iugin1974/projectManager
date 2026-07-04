@@ -4,31 +4,32 @@
 #include <string>
 class ftp {
 	private:
-		char* password;
-		char* userName;
-		char* ftp_fileName;
+		std::string password;
+		std::string userName;
+		std::string ftp_fileName;
 		bool verbose = false;
 		bool passwordSetted = false;
-		char* ftp_host;
+		std::string ftp_host;
 		static size_t read_callback(char *ptr, size_t size, size_t nmemb, FILE *stream);
-		void combine_string(char* n, const char* str1, const char* str2);
-		void get_local_file_name(char* n, const char* path); 
+		std::string combine_string(const std::string& str1, const std::string& str2);
+		std::string get_local_file_name(const std::string&); 
 		static size_t my_fwrite(void *buffer, size_t size, size_t nmemb, void *stream);
 		struct FtpFile {
 			const char *filename;
 			FILE *stream;
 		};
-		void createUserName(char* userName);
+		std::string createUserName();
 	public:
-		int uploadFile(const char* f);
-		int downloadFile(const char* ftp_file, const char* local_file);
-		int downloadFile(const char* local_file);
+		static void init();
+		static void close();
+		int uploadFile(const std::string& f);
+		int downloadFile(const std::string& ftp_file, const std::string& local_file);
+		int downloadFile(const std::string& local_file);
 		bool isPasswordSet();
 		void setPassword(std::string pwd);
 		void setVerbose(bool v);
 		void setHost(std::string  ftp_host);
 		void setUserName(std::string userName);
-		void free_memory();
 
 };
 #endif

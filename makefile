@@ -1,5 +1,5 @@
+FLAGS = -g -Wall -std=c++17
 CC = g++
-FLAGS = -g -Wall 
 LIBS = -lncurses -lcurl
 SRCDIR = src
 INCDIR = include

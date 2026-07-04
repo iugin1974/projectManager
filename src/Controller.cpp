@@ -124,7 +124,6 @@ void Controller::start()
 	if (use_ftp)
 	{
 		saveOnFtp(&pl);
-		_ftp.free_memory();
 	}
 	else
 	{
@@ -420,7 +419,7 @@ bool Controller::attributeExists(const char *name, TiXmlElement *element)
 void Controller::saveOnFtp(ProjectLibrary *pl)
 {
 	save(pl);
-	_ftp.uploadFile(FileUtilities::pmFile().c_str());
+	_ftp.uploadFile(FileUtilities::pmFile());
 }
 
 bool Controller::ftpPasswordSet() {
