@@ -38,9 +38,7 @@ void Table::setTextMenuBar(std::string txt)
 
 void Table::drawHLine(WINDOW *win, int line)
 {
-    int x = 0;
-    int y = 0;
-    getmaxyx(win, y, x);
+    int x = getmaxx(win);
     for (int i = 0; i < x; i++)
     {
         mvwaddch(win, line, i, ACS_HLINE);

@@ -45,7 +45,7 @@ void TableProject::display(Displayable *d)
     unsigned int row = 0;
     drawHLine(mainWin, row);
     drawCol(mainWin, colWidth, 4, row++, ACS_TTEE);
-    for (int i = 0; i < pl->size(); i++)
+    for (int i = 0; i < (int)pl->size(); i++)
     {
         if (i == currentProject)
         {
@@ -182,7 +182,7 @@ void TableProject::navigate(Displayable *d)
                 break;
                 // controlla se fosse l'ultimo progetto
                 // visualizzato nella tabella
-            bool isLast = currentProject == pl->size() - 1;
+            bool isLast = currentProject == (int)pl->size() - 1;
             view->deleteProject(pl, currentProject);
             // se l'utente ha cancellato l'ultima riga della tabella
             // il progetto corrente passa alla penultima,
@@ -242,8 +242,8 @@ void TableProject::highlight(Displayable *d, int i)
     ProjectLibrary *pl = static_cast<ProjectLibrary *>(d);
     currentProject += i;
     if (currentProject < 0)
-        currentProject = pl->size() - 1;
-    if (currentProject == pl->size())
+        currentProject = (int)pl->size() - 1;
+    if (currentProject == (int)pl->size())
         currentProject = 0;
 }
 

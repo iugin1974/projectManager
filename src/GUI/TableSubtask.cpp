@@ -26,7 +26,7 @@ void TableSubtask::display(Displayable *d)
 
     drawCol(mainWin, colWidth, 4, row, ACS_TTEE);
 
-    for (unsigned int i = 0; i < t->size(); i++)
+    for (int i = 0; i < (int)t->size(); i++)
     {
         Subtask *st = t->getSubtask(i);
         if (st->isDone())
@@ -100,7 +100,7 @@ void TableSubtask::navigate(Displayable *d)
         case 'D':
             if (task->size() != 0)
             {
-                bool isLast = currentSubtask == task->size() - 1;
+                bool isLast = currentSubtask == (int)task->size() - 1;
                 view->deleteSubtask(task, currentSubtask);
                 // se l'utente ha cancellato l'ultima riga della tabella
             // la task corrente passa alla penultima,
@@ -154,7 +154,7 @@ void TableSubtask::highlight(Displayable *d, int i)
     Task *t = static_cast<Task *>(d);
     currentSubtask += i;
     if (currentSubtask < 0)
-        currentSubtask = t->size() - 1;
-    if (currentSubtask == t->size())
+        currentSubtask = (int)t->size() - 1;
+    if (currentSubtask == (int)t->size())
         currentSubtask = 0;
 }

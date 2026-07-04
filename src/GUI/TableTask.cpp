@@ -33,7 +33,7 @@ void TableTask::display(Displayable *d)
 
     drawCol(mainWin, colWidth, 4, row, ACS_TTEE);
 
-    for (unsigned int i = 0; i < p->size(); i++)
+    for (int i = 0; i < (int)p->size(); i++)
     {
         Task *t = p->getTask(i);
         if (t->isDone())
@@ -130,7 +130,7 @@ void TableTask::navigate(Displayable *d)
         {
             if (task == nullptr)
                 break;
-            bool isLast = currentTask == p->size() - 1;
+            bool isLast = currentTask == (int)p->size() - 1;
             view->deleteTask(p, currentTask);
             // se l'utente ha cancellato l'ultima riga della tabella
             // la task corrente passa alla penultima,
@@ -210,7 +210,7 @@ void TableTask::highlight(Displayable *d, int i)
     currentTask += i;
     if (currentTask < 0)
         currentTask = p->size() - 1;
-    if (currentTask == p->size())
+    if (currentTask == (int)p->size())
         currentTask = 0;
 }
 

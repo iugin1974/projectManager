@@ -103,7 +103,7 @@ void View::wrapText(const std::string &input, int maxLineWidth, std::vector<std:
         {
             if (line.length() > 0)
             {
-                if (line.length() + 1 > maxLineWidth)
+                if ((int)line.length() + 1 > maxLineWidth)
                 {
                     lines.push_back(line);
                     line.clear();
@@ -147,7 +147,6 @@ void View::infoBox(unsigned int h, unsigned int w, const char *txt, const char *
     std::vector<std::string> lines;
     wrapText(txt, maxLineWidth, lines);
 
-    int row = 1;
     int offset = 0;
     int ch;
 
@@ -162,7 +161,7 @@ void View::infoBox(unsigned int h, unsigned int w, const char *txt, const char *
         int visibleLines = std::min(static_cast<unsigned int>(h - 2), static_cast<unsigned int>(lines.size()));
         for (int i = 0; i < visibleLines; ++i)
         {
-            mvwprintw(win, i + 1, 1, lines[offset + i].c_str());
+            mvwprintw(win, i + 1, 1, "%s", lines[offset + i].c_str());
         }
 
         wrefresh(win);
@@ -172,7 +171,7 @@ void View::infoBox(unsigned int h, unsigned int w, const char *txt, const char *
         switch (ch)
         {
         case KEY_DOWN:
-            if (offset + visibleLines < lines.size())
+            if (offset + visibleLines < (int)lines.size())
                 offset++;
             break;
         case KEY_UP:
