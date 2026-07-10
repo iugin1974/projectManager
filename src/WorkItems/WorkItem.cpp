@@ -3,17 +3,20 @@
 
 #include "WorkItem.h"
 
-WorkItem::WorkItem() {}
+WorkItem::WorkItem() {
+	getNow(&startDate);
+	dateValid = true;
+}
 
 WorkItem::WorkItem(WorkItem *prnt)
 {
 	parent = prnt;
-		setDate(WorkItem::START_DATE, parent->getDateAsString(WorkItem::START_DATE));
-		setDate(WorkItem::END_DATE, parent->getDateAsString(WorkItem::END_DATE));
+	getNow(&startDate); // data di inizio alla creazione
+	setDate(WorkItem::END_DATE, parent->getDateAsString(WorkItem::END_DATE));
+	dateValid = true;
 }
 
 WorkItem::~WorkItem() {
-	getNow(&startDate);
 }
 
 WorkItem *WorkItem::getParent()
