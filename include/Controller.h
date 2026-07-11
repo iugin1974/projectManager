@@ -4,6 +4,7 @@
 #include "ftp.h"
 #include "View.h"
 #include "ProjectLibrary.h"
+#include "TodoLibrary.h"
 #include "Subtask.h"
 #include "tinyxml.h"
 #include <string>
@@ -18,9 +19,10 @@ private:
 	std::string password;
 	std::string getpass(const char *prompt, bool show_asterisk);
 	int get_char();
-	void load(ProjectLibrary *pl);
+	void load(ProjectLibrary *pl, TodoLibrary *tl);
 	bool attributeExists(const char *name, TiXmlElement *element);
 	bool readConfigFile(const std::string key, std::string *value);
+	void saveTodo(TiXmlElement *parent, Todo &t);
 	void saveTask(TiXmlElement* parent, Task* t);
 	void loadTask(TiXmlElement* parent, Project* p);
 	void saveSubtask(TiXmlElement* parent, Subtask* s);
@@ -37,8 +39,8 @@ public:
     ENDS_BEFORE_PARENT_START,
     ENDS_BEFORE_START
 	};
-	void save(ProjectLibrary *pl);
-	void saveOnFtp(ProjectLibrary *pl);
+	void save(ProjectLibrary *pl, TodoLibrary* tl);
+	void saveOnFtp(ProjectLibrary *pl, TodoLibrary *tl);
 	bool ftpPasswordSet();
 	void start();
 	int main();

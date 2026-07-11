@@ -20,6 +20,20 @@ void ProjectLibrary::addProject(Project* p) {
     stateChanged();
 }
 
+void ProjectLibrary::removeProject(Project *p)
+{
+	for (auto it = listProject.begin(); it != listProject.end(); ++it)
+	{
+		if (*it == p)
+		{
+			delete *it;
+			listProject.erase(it);
+			stateChanged();
+			return;
+		}
+	}
+}
+
 Project* ProjectLibrary::getNewProject() {
     Project *p = new Project();
     p->setProjectLibrary(this);

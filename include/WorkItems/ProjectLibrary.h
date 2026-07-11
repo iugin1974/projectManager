@@ -19,6 +19,7 @@ class ProjectLibrary : public Observable, public Displayable {
 		ProjectLibrary();
 		~ProjectLibrary();
 		void addProject (Project* p);
+		void removeProject(Project* p);
 		Project* getNewProject();
 		Project* getProject (unsigned int p);
 		void getListProject(std::vector<Project*>*);

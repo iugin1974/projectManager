@@ -59,33 +59,32 @@ View::~View()
 | inputBar
 +---------------------------------------
 
-
 */
-void View::initScreen(ProjectLibrary *pl)
-{
-    init_pair(5, COLOR_MAGENTA, COLOR_GREEN); // for test
-    initscr();
-    getmaxyx(stdscr, lines, cols);
-    curs_set(0);
-    menuBar = newwin(1, cols, 0, 0);
-    mainWin = newpad(200, cols);
-    inputBar = newwin(1, cols, lines - 1, 0);
-    headerWin = newwin(1, cols, 2, 0);
-    keypad(mainWin, TRUE);
-    scrollok(mainWin, true);
-    noecho();
-    start_color();
-    use_default_colors();
-    init_pair(1, COLOR_YELLOW, -1);
-    init_pair(2, COLOR_RED, -1);
-    cbreak();
-    navigateTable(pl);
-    delwin(menuBar);
-    delwin(mainWin);
-    delwin(inputBar);
-    delwin(headerWin);
-    endwin();
 
+void View::initScreen(Workspace *ws)
+{
+	init_pair(5, COLOR_MAGENTA, COLOR_GREEN); // for test
+	initscr();
+	getmaxyx(stdscr, lines, cols);
+	curs_set(0);
+	menuBar = newwin(1, cols, 0, 0);
+	mainWin = newpad(200, cols);
+	inputBar = newwin(1, cols, lines - 1, 0);
+	headerWin = newwin(1, cols, 2, 0);
+	keypad(mainWin, TRUE);
+	scrollok(mainWin, true);
+	noecho();
+	start_color();
+	use_default_colors();
+	init_pair(1, COLOR_YELLOW, -1);
+	init_pair(2, COLOR_RED, -1);
+	cbreak();
+	navigateTable(ws);
+	delwin(menuBar);
+	delwin(mainWin);
+	delwin(inputBar);
+	delwin(headerWin);
+	endwin();
 }
 
 void View::setEditor(std::string e) {
@@ -329,13 +328,22 @@ void View::setRoot()
     }
 }
 
-void View::deleteProject(ProjectLibrary *pl, unsigned int i)
+void View::deleteProject(ProjectLibrary *pl, Project *p)
 {
-    std::string input;
-    setInputMaske(&input, "Are you sure? [Y/n]:");
-    if (input != "Y")
-        return;
-    controller->deleteProject(pl, i);
+	std::string input;
+	setInputMaske(&input, "Are you sure? [Y/n]:");
+	if (input != "Y")
+		return;
+	pl->removeProject(p);
+}
+
+void View::deleteTodo(TodoLibrary *tl, Todo *t)
+{
+	std::string input;
+	setInputMaske(&input, "Are you sure? [Y/n]:");
+	if (input != "Y")
+		return;
+	tl->removeTodo(t);
 }
 
 void View::deleteTask(Project *p, unsigned int i)
@@ -358,7 +366,7 @@ void View::deleteSubtask(Task* t, unsigned int i)
     controller->deleteSubtask(t, i);
 }
 
-void View::updateView(ProjectLibrary *pl)
+void View::updateView(Observable* o)
 {
    // clear();
     // TODO   display(pl);
@@ -378,6 +386,17 @@ void View::setInputMaske(std::string *input, std::string txt)
     cbreak();
     wclear(inputBar);
     wrefresh(inputBar);
+}
+
+void View::createTodo(TodoLibrary *tl)
+{
+	std::string input;
+	setInputMaske(&input, "Todo: ");
+	if (input.empty())
+		return;
+	Todo t;
+	t.addText(input);
+	tl->addNewTodo(t);
 }
 
 void View::createNewTask(Project *p)
@@ -565,15 +584,12 @@ void View::editProject(Project *p)
         infoBox(5, 50, "Invalid date format.", "Error");
 }
 
-void View::save(ProjectLibrary *pl)
+void View::save(Workspace *ws)
 {
-    controller->save(pl);
+	controller->save(ws->getProjectLibrary(), ws->getTodoLibrary());
 }
 
-void View::saveOnFtp(ProjectLibrary *pl)
+void View::saveOnFtp(ProjectLibrary *pl, TodoLibrary *tl)
 {
-    if (controller->ftpPasswordSet()) {
-
-    } 
-    controller->saveOnFtp(pl);
+	controller->saveOnFtp(pl, tl);
 }

@@ -86,6 +86,34 @@ void Table::setText(WINDOW *win, int colW[], int line, int col, std::string text
     mvwprintw(win, line, pos, text.c_str());
 }
 /**
+ * Ritorna il numero di linea dell'elemento evidenziato
+ * nella lista combinata (Todo + Project).
+ */
+
+int Table::getCurrentLine(std::vector<WorkItem *> &items, unsigned int currentRow, unsigned int todoCount)
+{
+	unsigned int currentLine = 1; // bordo superiore
+
+	if (todoCount > 0)
+	{
+		if (currentRow < todoCount)
+			return currentLine + currentRow; // ancora dentro il blocco Todo
+
+		currentLine += todoCount; // tutte le righe dei Todo
+		currentLine += 1;         // bordo con colonne prima della tabella progetti
+	}
+
+	for (unsigned int i = todoCount; i < currentRow && i < items.size(); i++)
+	{
+		Project *p = dynamic_cast<Project *>(items.at(i));
+		if (p == nullptr)
+			continue;
+		currentLine += p->size();
+		currentLine += 2;
+	}
+	return currentLine;
+}
+/**
  * Ritorna il numero di linea del progetto evidenziato.
  */
 int Table::getCurrentLine(ProjectLibrary *pl, unsigned int currentProject)

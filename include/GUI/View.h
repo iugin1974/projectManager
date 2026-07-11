@@ -2,7 +2,10 @@
 #define VIEW_H
 #include <ncurses.h>
 #include <string>
+#include "Workspace.h"
+#include "Observable.h"
 #include "ProjectLibrary.h"
+#include "TodoLibrary.h"
 #include "Observer.h"
 #include "Files.h"
 #include "WorkItem.h"
@@ -44,9 +47,10 @@ public:
 	void addFile(Files *f);
 	void deleteFile(Files *f, int i);
 	void openFile(Files *f, int i);
-	void initScreen(ProjectLibrary *pl);
-	void updateView(ProjectLibrary *pl) override;
-	void deleteProject(ProjectLibrary *pl, unsigned int i);
+	void initScreen(Workspace *ws);
+	void updateView(Observable*) override;
+	void deleteProject(ProjectLibrary *pl, Project *p);
+void deleteTodo(TodoLibrary *tl, Todo *t);
 	void infoBox(unsigned int h, unsigned int w, const char *txt, const char *title);
 	void gannt(Project *p);
 	void setDate(WorkItem *t, int type);
@@ -57,13 +61,14 @@ public:
 	void editTask(Task *t);
 	void deleteTask(Project *p, unsigned int i);
 	void deleteSubtask(Task* t, unsigned int i);
+	void createTodo(TodoLibrary*);
 	void createNewTask(Project *p);
 	void createNewSubtask(Task* t);
 	void brainstorming(Project *p, TableTask* t);
 	void brainstorming(Task* t, TableSubtask* s);
 	void createNewProject(ProjectLibrary *pl);
-	void save(ProjectLibrary *pl);
-	void saveOnFtp(ProjectLibrary *pl);
+	void save(Workspace *ws);
+	void saveOnFtp(ProjectLibrary *pl, TodoLibrary *tl);
 	void setRoot();
 	void setEditor(std::string editor);
 };

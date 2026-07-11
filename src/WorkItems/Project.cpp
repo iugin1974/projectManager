@@ -66,6 +66,8 @@ std::vector<Task *> Project::getTaskList()
 
 void Project::setDone(bool d)
 {
+	if (size() > 0)
+		return;
 	done = d;
 	update();
 }

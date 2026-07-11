@@ -1,14 +1,12 @@
+// Observer.h
 #ifndef OBSERVER_H
 #define OBSERVER_H
 
-#include <vector>
-#include "Project.h"
+class Observable;  // forward declaration, basta per un puntatore
 
 class Observer {
-	public:
-		virtual ~Observer() {};
-		virtual void updateView (ProjectLibrary* pl) = 0;
-
+public:
+	virtual ~Observer() {}
+	virtual void updateView(Observable *o) = 0;
 };
-
 #endif

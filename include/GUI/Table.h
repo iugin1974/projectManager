@@ -27,6 +27,7 @@ protected:
 	void setText(WINDOW *win, int colW[], int line, int col, std::string text);
 	int getCurrentLine(ProjectLibrary *pl, unsigned int currentProject);
 	int getCurrentLine(Project *p, unsigned int currentTask);
+	int getCurrentLine(std::vector<WorkItem *> &items, unsigned int currentRow, unsigned int todoCount);
 	virtual void display(Displayable *d){};
 public:
 	Table();

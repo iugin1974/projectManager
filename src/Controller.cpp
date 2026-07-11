@@ -2,6 +2,7 @@
 #include "View.h"
 #include "Date.h"
 #include "ProjectLibrary.h"
+#include "TodoLibrary.h"
 #include "tinyxml.h"
 #include "ftp.h"
 #include "FileUtilities.h"
@@ -113,21 +114,24 @@ void Controller::start()
 	}
 	std::string editor;
 	readConfigFile("default_editor", &editor);
-	View v(this);
-	v.setEditor(editor);
-	ProjectLibrary pl;
-	load(&pl);
-	pl.addObserver(&v);
 
-	v.initScreen(&pl);
-	/* if (pl->isChanged())*/
+	View v(this);
+v.setEditor(editor);
+ProjectLibrary pl;
+TodoLibrary tl;
+load(&pl, &tl);
+pl.addObserver(&v);
+tl.addObserver(&v);
+Workspace ws(&pl, &tl);
+v.initScreen(&ws);
+
 	if (use_ftp)
 	{
-		saveOnFtp(&pl);
+		saveOnFtp(&pl, &tl);
 	}
 	else
 	{
-		save(&pl);
+		save(&pl, &tl);
 	}
 }
 
@@ -178,59 +182,73 @@ bool Controller::readConfigFile(const std::string key, std::string *value)
 	}
 }
 
-void Controller::load(ProjectLibrary *pl)
+void Controller::load(ProjectLibrary *pl, TodoLibrary *tl)
 {
-	TiXmlDocument doc;
-	if (use_ftp)
-		doc.LoadFile("/tmp/pm.xml");
-	else
-		doc.LoadFile(FileUtilities::pmFile().c_str());
-	bool loaded = doc.LoadFile();
-	if (!loaded)
-		return;
-	TiXmlHandle docHandle(&doc);
-	TiXmlElement *project = docHandle.FirstChild("ProjectLibrary").Child("Project", 0).ToElement();
-	Project *p = NULL;
-	while (project)
-	{
-		p = pl->getNewProject();
-		const char *attr = project->Attribute("name");
-		p->addText(attr);
-		// TODO controlla che la data sia valida.
-		// Se si assegnala, altrimenti no e setta
-		// data non valida (se necessario)
-		// La stessa cosa per le task
+    TiXmlDocument doc;
+    if (use_ftp)
+        doc.LoadFile("/tmp/pm.xml");
+    else
+        doc.LoadFile(FileUtilities::pmFile().c_str());
+    bool loaded = doc.LoadFile();
+    if (!loaded)
+        return;
+    TiXmlHandle docHandle(&doc);
+    TiXmlElement *project = docHandle.FirstChild("ProjectLibrary").Child("Project", 0).ToElement();
+    Project *p = NULL;
+    while (project)
+    {
+        p = pl->getNewProject();
+        const char *attr = project->Attribute("name");
+        p->addText(attr);
 
-		/* tinyXML ritorna NULL se l'attributo non esiste */
-		if (project->Attribute("starts"))
-		{
-			p->setDate(Project::START_DATE, project->Attribute("starts"));
-		}
+        if (project->Attribute("starts"))
+        {
+            p->setDate(Project::START_DATE, project->Attribute("starts"));
+        }
 
-		if (project->Attribute("ends"))
-			p->setDate(Project::END_DATE, project->Attribute("ends"));
+        if (project->Attribute("ends"))
+            p->setDate(Project::END_DATE, project->Attribute("ends"));
 
-		if (project->Attribute("starts"))
-			p->setDate(WorkItem::START_DATE, project->Attribute("starts"));
+        if (project->Attribute("starts"))
+            p->setDate(WorkItem::START_DATE, project->Attribute("starts"));
 
-		if (attributeExists("comment", project))
-			p->addComment(project->Attribute("comment"));
+        if (attributeExists("comment", project))
+            p->addComment(project->Attribute("comment"));
 
-		TiXmlElement *task = project->FirstChildElement("Task");
-		loadTask(task, p);
+        TiXmlElement *task = project->FirstChildElement("Task");
+        loadTask(task, p);
 
-		TiXmlElement *file = project->FirstChildElement("File");
-		Files *f = p->getFileList();
-		while (file)
-		{
-			const char *entry = file->Attribute("path");
-			f->add(entry);
-			file = file->NextSiblingElement("File");
-		}
+        TiXmlElement *file = project->FirstChildElement("File");
+        Files *f = p->getFileList();
+        while (file)
+        {
+            const char *entry = file->Attribute("path");
+            f->add(entry);
+            file = file->NextSiblingElement("File");
+        }
 
-		pl->addProject(p);
-		project = project->NextSiblingElement("Project");
-	}
+        pl->addProject(p);
+        project = project->NextSiblingElement("Project");
+    }
+
+    // Caricamento Todo
+    TiXmlElement *todoElem = docHandle.FirstChild("ProjectLibrary").FirstChild("TodoLibrary").Child("Todo", 0).ToElement();
+    while (todoElem)
+    {
+        Todo t;
+        const char *text = todoElem->Attribute("text");
+        if (text)
+            t.addText(text);
+
+        if (todoElem->Attribute("created"))
+            t.setDate(WorkItem::START_DATE, todoElem->Attribute("created"));
+
+        if (todoElem->Attribute("done"))
+            t.setDone(std::string(todoElem->Attribute("done")) == "true");
+
+        tl->addNewTodo(t);
+        todoElem = todoElem->NextSiblingElement("Todo");
+    }
 }
 
 void Controller::loadTask(TiXmlElement *task, Project *p)
@@ -332,7 +350,7 @@ void Controller::loadSubtask(TiXmlElement *subtask, Task *t)
 	}
 }
 
-void Controller::save(ProjectLibrary *pl)
+void Controller::save(ProjectLibrary *pl, TodoLibrary *tl)
 {
 	TiXmlDocument doc;
 	TiXmlDeclaration *decl = new TiXmlDeclaration("1.0", "", "");
@@ -368,8 +386,30 @@ void Controller::save(ProjectLibrary *pl)
 			file->SetAttribute("path", f->at(i).c_str());
 		}
 	}
+
+	TiXmlElement *todosRoot = new TiXmlElement("TodoLibrary");
+	root->LinkEndChild(todosRoot);
+	for (unsigned int i = 0; i < tl->size(); i++)
+	{
+		saveTodo(todosRoot, tl->getTodo(i));
+	}
+
+
 	doc.SaveFile(FileUtilities::pmFile().c_str());
 	pl->setChanged(false);
+	tl->setChanged(false);
+}
+
+void Controller::saveTodo(TiXmlElement *parent, Todo &t)
+{
+	TiXmlElement *todo = new TiXmlElement("Todo");
+	parent->LinkEndChild(todo);
+	todo->SetAttribute("text", t.getText().c_str());
+	todo->SetAttribute("created", t.getDateAsString(WorkItem::START_DATE).c_str());
+	if (t.isDone())
+		todo->SetAttribute("done", "true");
+	if (t.hasComment())
+		todo->SetAttribute("comment", t.getComment().c_str());
 }
 
 void Controller::saveTask(TiXmlElement *parent, Task *t)
@@ -416,9 +456,9 @@ bool Controller::attributeExists(const char *name, TiXmlElement *element)
 	return false;
 }
 
-void Controller::saveOnFtp(ProjectLibrary *pl)
+void Controller::saveOnFtp(ProjectLibrary *pl, TodoLibrary *tl)
 {
-	save(pl);
+	save(pl, tl);
 	_ftp.uploadFile(FileUtilities::pmFile());
 }
 
